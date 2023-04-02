@@ -4,8 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +22,13 @@ public class Material {
     @Size(max = 60)
     private String nome;
 
-    @NotBlank
+    @NotNull
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer=3, fraction=2)
     private BigDecimal preco;
+
+    @Override
+    public String toString() {
+        return getId() + "-" + getNome() + "-" + getPreco();
+    }
 }
