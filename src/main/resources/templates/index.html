@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Projeto</h1>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Nome</th>
+    <th>Preço</th>
+  </tr>
+  <tr th:each="material : ${materiais}">
+    <td th:text="${material.id}"></td>
+    <td th:text="${material.nome}"></td>
+    <td th:text="${material.preco}"></td>
+    <!-- <td>
+      <a th:href="@{/users/{id}(id=${material.id})}">View</a>
+      <a th:href="@{/deleteUser/{id}(id=${usuario.id})}">Delete</a>
+    </td>
+    -->
+  </tr>
+</table>
+</body>
+</html>
