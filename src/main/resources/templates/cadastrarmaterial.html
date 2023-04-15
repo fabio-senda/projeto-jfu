@@ -2,11 +2,11 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
     <title>Cadastrar Material</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-  <h1>Cadastrar Material</h1>
+  <h1 style="font-family: 'Arial'">Cadastrar Material</h1>
   <div th:if="${mensagem}" th:text="${mensagem}"></div>
   <form th:action="@{cadastrar/salvar}" th:object="${material}" method="post">
     <label>Nome do material:</label><input type="text" th:field="*{nome}"><br>

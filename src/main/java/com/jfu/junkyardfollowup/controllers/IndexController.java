@@ -6,9 +6,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class IndexController {
-    @GetMapping("/index")
-    public ModelAndView index() {
-        ModelAndView mv = new ModelAndView("index");
-        return mv;
+    @GetMapping
+    public String index() {
+        return "redirect:/materiais";
     }
 }

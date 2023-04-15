@@ -14,12 +14,13 @@ public class Fornecedor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank
-    @Size(max = 60)
     private String nome;
+
     @NotBlank
-    @Size(max = 60)
     private String email;
+
     @NotBlank
     private String telefone;
 }

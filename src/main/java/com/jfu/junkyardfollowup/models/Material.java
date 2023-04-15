@@ -1,9 +1,6 @@
 package com.jfu.junkyardfollowup.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +9,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Entity
+@Table(name = "Material")
+@Entity(name = "material")
 public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +22,14 @@ public class Material {
 
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
-    @Digits(integer=3, fraction=2)
-    private BigDecimal preco;
+    @Digits(integer=9, fraction=2)
+    private BigDecimal precoAtual;
+
+    @NotNull
+    private BigDecimal quantidade = BigDecimal.valueOf(0.0);
 
     @Override
     public String toString() {
-        return getId() + "-" + getNome() + "-" + getPreco();
+        return getId() + "-" + getNome() + "-" + getPrecoAtual();
     }
 }
