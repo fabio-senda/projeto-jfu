@@ -1,0 +1,67 @@
+header {
+    width: 100vw;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    background-color: #d9d9d9;
+}
+
+.logo {
+    display: flex;
+    margin: .3125rem .625rem;
+    padding: .3125rem;
+    align-items: center;
+}
+
+.logo img {
+    width: 60px;
+    height: 60px;
+}
+
+.logo h1{
+    margin-left: .625rem;
+    font-size: 2rem;
+}
+
+.menu ul{
+    margin-left: 15vw;
+    display: flex;
+    gap: .625rem;
+    flex-shrink: none;
+}
+
+.item-menu {
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 1.5rem;
+    padding: .625rem;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 9fr;
+}
+
+.menu-lateral{
+    padding: 0;
+    margin: 0;
+    height: calc(100vh - 80px);
+    background-color: #d9d9d9;
+}
+
+.menu-lateral ul{
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    text-align: center;
+    margin-top: 1.875rem;
+}
+
+.menu-lateral ul li{
+    padding: .625rem;
+    font-size: .875rem;
+}
+
+.menu-lateral a span{
+    display: block;
+}

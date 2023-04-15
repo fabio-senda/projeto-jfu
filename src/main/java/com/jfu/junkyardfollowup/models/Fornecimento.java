@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class Fornecimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     private Material material;

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class RegistroDeCompra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     private Fornecedor fornecedor;

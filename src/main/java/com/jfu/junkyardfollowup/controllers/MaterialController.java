@@ -23,7 +23,7 @@ public class MaterialController {
     @GetMapping
     public String listarTodosMateriais(Model model){
         model.addAttribute("materiais", materialRepository.findAll());
-        return "index.html";
+        return "";
     }
 
     @GetMapping("/cadastrar")
