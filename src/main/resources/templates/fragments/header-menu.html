@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+</head>
+<body>
+<header th:fragment="navigation">
+    <a class="logo" th:href="@{/jfu}">
+        <img src="../assets/logo.png" alt="logo">
+        <h1>JUNK FOLLOW-UP</h1>
+    </a>
+    <nav class="menu">
+        <ul>
+            <li>
+                <a th:class="${paginaAtiva == 'compra'} ? 'item-menu ativa' : 'item-menu'"
+                   th:href="@{/jfu/compra}">Compra</a>
+            </li>
+            <li>
+                <a th:class="${paginaAtiva == 'venda'} ? 'item-menu ativa' : 'item-menu'"
+                   th:href="@{/jfu/venda}">Venda</a>
+            </li>
+            <li>
+                <a th:class="${paginaAtiva == 'estoque'} ? 'item-menu ativa' : 'item-menu'"
+                   th:href="@{/jfu/estoque}">Estoque</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+</body>
+</html>

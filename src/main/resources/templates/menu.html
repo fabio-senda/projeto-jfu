@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -14,47 +14,21 @@
 </head>
 
 <body>
-    <header>
-        <a class="logo" href="/html/menu.html">
-            <img src="../assets/logo.png" alt="logo">
-            <h1>JUNK FOLLOW-UP</h1>
-        </a>
-        <nav class="menu">
-            <ul>
-                <li><a class="item-menu" href="#">Compra</a></li>
-                <li><a class="item-menu" href="#">Venda</a></li>
-                <li><a class="item-menu" href="#">Estoque</a></li>
-            </ul>
-        </nav>
-    </header>
+<header th:replace="~{fragments/header-menu :: navigation}"></header>
+<main>
+    <span th:if="${paginaAtiva == 'compra'}">
+        <aside th:replace="~{fragments/menu-compra :: aside-compra}"></aside>
+    </span>
 
-    <main>
-        <aside class="menu-lateral">
-            <ul>
-                <li>
-                    <a href="#">
-                        <img src="../assets/carrinho.png" alt="icone de compra">
-                        <span>Adicionar Compra</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img src="../assets/clientes.png" alt="icone de cliente">
-                        <span>Adicionar cliente</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img src="../assets/compra.png" alt="icone de consulta">
-                        <span>Consultar compra</span>
-                    </a>
-                </li>
-            </ul>
-        </aside>
-        <section>
+    <span th:else th:if="${paginaAtiva == 'venda'}">
+        <aside th:replace="~{fragments/menu-venda :: aside-venda}"></aside>
+    </span>
+    <span th:else th:if="${paginaAtiva == 'estoque'}">
+        <aside th:replace="~{fragments/menu-estoque :: aside-estoque}"></aside>
+    </span>
+    <section>
 
-        </section>
-    </main>
+    </section>
+</main>
 </body>
-
 </html>

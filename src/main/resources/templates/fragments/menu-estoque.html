@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+</head>
+<body>
+    <aside class="menu-lateral" th:fragment="aside-estoque">
+        <ul>
+            <li>
+                <a th:href="@{/jfu/compra}">
+                    <img src="../assets/novoMaterial.png" alt="icone de adicionar">
+                    <span>Adicionar Material</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/jfu/compra}">
+                    <img src="../assets/img-tabela.png" alt="icone de tabela">
+                    <span>Tabela de preços</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/jfu/compra}">
+                    <img src="../assets/img-pdf.png" alt="icone de pdf">
+                    <span>Relatório de Estoque</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+</body>
+
+</html>

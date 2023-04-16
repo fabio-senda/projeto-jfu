@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+</head>
+<body>
+    <aside class="menu-lateral" th:fragment="aside-venda">
+        <ul>
+            <li>
+                <a th:href="@{/jfu/compra}">
+                    <img src="../assets/carrinho.png" alt="icone de venda">
+                    <span>Adicionar Venda</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/jfu/compra}">
+                    <img src="../assets/clientes.png" alt="icone de cliente">
+                    <span>Adicionar cliente</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/jfu/compra}">
+                    <img src="../assets/compra.png" alt="icone de consulta">
+                    <span>Consultar Venda</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+</body>
+
+</html>
