@@ -19,7 +19,9 @@ public class Fornecimento {
     @ManyToOne
     private Material material;
 
-    private BigDecimal precoDeCompra;
+    protected BigDecimal precoDeCompra;
+
+    protected BigDecimal quantidade;
 
     @ManyToOne
     private RegistroDeCompra registroDeCompra;

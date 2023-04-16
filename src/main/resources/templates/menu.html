@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/registrar.css">
     <title>Menu</title>
 </head>
 
@@ -27,7 +28,9 @@
         <aside th:replace="~{fragments/menu-estoque :: aside-estoque}"></aside>
     </span>
     <section>
-
+        <span th:if="${paginaAtiva == 'compra' and aba == 'registrar'}">
+            <div th:replace="~{fragments/adicionar-compra :: add-compra}"></div>
+        </span>
     </section>
 </main>
 </body>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/registrar.css">
+    <title>Adicionar Compra</title>
+</head>
+<body>
+<div class="conteudo" th:fragment="add-compra">
+    <section class="adicionar">
+        <h1>Adicionar Compra</h1>
+        <form th:action="@{/jfu/adicionarCompra}" th:object="${compra}" method="post">
+            <div class="caixa">
+                <label>Material:</label>
+                <select th:field="*{fornecimentos[__${#lists.size(compra.fornecimentos)}__].idMaterial}">
+                    <option th:each="material : ${materiais}" th:value="${material.id}" th:text="${material.nome}">
+                </select>
+            </div>
+            <div class="caixa">
+                <label>Preço:</label>
+                <input type="number" name="precoDeCompra" th:field="*{fornecimentos[__${#lists.size(compra.fornecimentos)}__].precoDeCompra}" />
+            </div>
+            <div class="caixa">
+                <label>Peso:</label>
+                <input type="number" name="quantidade"th:field="*{fornecimentos[__${#lists.size(compra.fornecimentos)}__].quantidade}" />
+            </div>
+            <button class="btn-add-mat" type="submit">Adicionar Produto</button>
+        </form>
+            <div class="total">
+                <h2>Total: R$</h2>
+            </div>
+            <form action="@{/jfu/finalizarCompra}">
+                <button class="btn-registrar" type="submit">Registrar Compra</button>
+            </form>
+    </section>
+    <section class="mat-registrados">
+        <table class="tabela">
+            <thead>
+            <tr>
+                <th>Material</th>
+                <th>Quantidade</th>
+                <th>Preço por kg</th>
+                <th>Preço total</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="forn : ${compra.fornecimentos}">
+                <td th:text="${forn.nome}"></td>
+                <td th:text="${forn.quantidade}"></td>
+                <td th:text="${forn.precoDeCompra}"></td>
+                <td th:text="${forn.precoTotal}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
+</html>

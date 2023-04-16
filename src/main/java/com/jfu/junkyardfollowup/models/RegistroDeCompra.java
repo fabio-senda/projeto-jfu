@@ -7,6 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,6 +20,9 @@ public class RegistroDeCompra {
 
     @ManyToOne
     private Fornecedor fornecedor;
+
+    @OneToMany
+    private List<Fornecimento> fornecimentos = new ArrayList<>();
 
     //@DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime data;
