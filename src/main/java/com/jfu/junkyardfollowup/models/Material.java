@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
 
@@ -23,13 +24,14 @@ public class Material {
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
     @Digits(integer=9, fraction=2)
-    private BigDecimal precoAtual;
+    private BigDecimal preco;
 
     @NotNull
+    @Value("0")
     private BigDecimal quantidade = BigDecimal.valueOf(0.0);
 
     @Override
     public String toString() {
-        return getId() + "-" + getNome() + "-" + getPrecoAtual();
+        return getId() + "-" + getNome() + "-" + getPreco();
     }
 }

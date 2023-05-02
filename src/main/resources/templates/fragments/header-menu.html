@@ -7,23 +7,23 @@
     <title>Menu</title>
 </head>
 <body>
-<header th:fragment="navigation">
-    <a class="logo" th:href="@{/jfu}">
+<header class="menu-principal" th:fragment="navigation">
+    <a class="logo" th:href="@{/jfu/}">
         <img src="../assets/logo.png" alt="logo">
         <h1>JUNK FOLLOW-UP</h1>
     </a>
     <nav class="menu">
         <ul>
             <li>
-                <a th:class="${paginaAtiva == 'compra'} ? 'item-menu ativa' : 'item-menu'"
+                <a th:class="${ativa == 'compra'} ? 'item-menu ativa' : 'item-menu'"
                    th:href="@{/jfu/compra}">Compra</a>
             </li>
             <li>
-                <a th:class="${paginaAtiva == 'venda'} ? 'item-menu ativa' : 'item-menu'"
+                <a th:class="${ativa == 'venda'} ? 'item-menu ativa' : 'item-menu'"
                    th:href="@{/jfu/venda}">Venda</a>
             </li>
             <li>
-                <a th:class="${paginaAtiva == 'estoque'} ? 'item-menu ativa' : 'item-menu'"
+                <a th:class="${ativa == 'estoque'} ? 'item-menu ativa' : 'item-menu'"
                    th:href="@{/jfu/estoque}">Estoque</a>
             </li>
         </ul>

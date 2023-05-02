@@ -1,4 +1,4 @@
-header {
+.menu-principal {
     width: 100vw;
     height: 80px;
     display: flex;
@@ -56,10 +56,9 @@ header {
 }
 
 .ativa {
-    font-weight: 700;
+    font-weight: 700;   
     color: #0446F0;
 }
-
 .ativa::after{
     content: "";
     display: block;
@@ -72,7 +71,7 @@ header {
     transform: scaleX(1);
 }
 
-main {
+.conteudo {
     display: grid;
     grid-template-columns: 1fr 9fr;
 }
@@ -87,20 +86,19 @@ main {
 .menu-lateral ul{
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
     text-align: center;
     margin-top: 1.875rem;
 }
 
-.menu-lateral ul li{
-    padding: .625rem;
+.lat-item{
+    padding: 1rem .625rem;
     font-size: .875rem;
     background-color: #d9d9d9;
     transition: background-color .5s ease-in-out;
     cursor: pointer;
 }
 
-.menu-lateral ul li:hover{
+.lat-item:hover{
     background-color: #c9c3c3;
 }
 

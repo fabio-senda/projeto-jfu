@@ -7,24 +7,24 @@
 <body>
     <aside class="menu-lateral" th:fragment="aside-estoque">
         <ul>
-            <li>
-                <a th:href="@{/jfu/compra}">
+            <a class="lat-item" th:href=" @{/jfu/adicionarMaterial}">
+                <li>
                     <img src="../assets/novoMaterial.png" alt="icone de adicionar">
                     <span>Adicionar Material</span>
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/jfu/compra}">
+                </li>
+            </a>
+            <a class="lat-item" th:href=" @{/jfu/consultarEstoque}">
+                <li>
                     <img src="../assets/img-tabela.png" alt="icone de tabela">
                     <span>Tabela de preços</span>
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/jfu/compra}">
+                </li>
+            </a>
+            <a class="lat-item" th:href=" @{/jfu/compra}">
+                <li>
                     <img src="../assets/img-pdf.png" alt="icone de pdf">
                     <span>Relatório de Estoque</span>
-                </a>
-            </li>
+                </li>
+            </a>
         </ul>
     </aside>
 </body>

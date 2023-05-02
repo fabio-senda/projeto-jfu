@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 body {
     padding: 0;
     margin: 0;
@@ -34,4 +35,26 @@ a {
 
 img {
     margin: 0;
+}
+
+.adicionar h1{
+    margin-bottom: 16px;
+    font-weight: 700;
+}
+
+.caixa {
+    margin-bottom: 20px;  
+}
+
+.caixa label {
+    display: block;
+    margin-bottom: .375rem;
+}
+
+.caixa input, select {
+    padding: .375rem .625rem;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }

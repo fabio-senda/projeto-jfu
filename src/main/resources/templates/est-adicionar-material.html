@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/menu.css">
+  <link rel="stylesheet" href="../css/registrar.css">
+  <link rel="stylesheet" href="../css/adicionar-material.css">
+  <title>Menu</title>
+</head>
+
+<body>
+<header th:replace="~{fragments/header-menu :: navigation}"></header>
+<div class="conteudo">
+  <aside th:replace="~{fragments/menu-estoque :: aside-estoque}"></aside>
+
+  <main>
+    <form class="adicionar" th:action="@{/jfu/adicionarMaterial}" th:object="${material}" method="post">
+      <h1>Adicionar Material</h1>
+      <div class="caixa">
+        <label for="material">Material</label>
+        <input id="material" type="text" th:field="*{nome}">
+        <div th:errors="*{nome}"></div>
+      </div>
+      <div class="caixa">
+        <label for="preco">Preço por kg</label>
+        <input id="preco" type="text" th:errorclass="" th:field="*{preco}">
+        <div th:errors="*{preco}"></div>
+      </div>
+      <button class="btn-add-mat" type="submit">Adicionar Material</button>
+    </form>
+  </main>
+
+</div>
+</body>
+
+</html>

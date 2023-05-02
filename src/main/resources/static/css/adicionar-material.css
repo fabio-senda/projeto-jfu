@@ -1,0 +1,12 @@
+main{
+    display: grid;
+    grid-template-columns: 2fr 3fr 4fr 3fr 3fr;
+    grid-template-rows: auto auto auto auto auto ;
+}
+
+.adicionar{
+    grid-column-start: 3;
+    grid-column-end: 3;
+    margin: auto 0;
+    grid-row: 2;
+}

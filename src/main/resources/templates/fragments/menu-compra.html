@@ -7,24 +7,24 @@
 <body>
 <aside class="menu-lateral" th:fragment="aside-compra">
     <ul>
-        <li>
-            <a th:href="@{/jfu/adicionarCompra}">
+        <a class="lat-item" th:href=" @{/jfu/compra}">
+            <li>
                 <img src="../assets/carrinho.png" alt="icone de compra">
                 <span>Adicionar Compra</span>
-            </a>
-        </li>
-        <li>
-            <a th:href="@{/jfu/compra}">
+            </li>
+        </a>
+        <a class="lat-item" th:href=" @{/jfu/compra}">
+            <li>
                 <img src="../assets/clientes.png" alt="icone de cliente">
                 <span>Adicionar cliente</span>
-            </a>
-        </li>
-        <li>
-            <a th:href="@{/jfu/compra}">
+            </li>
+        </a>
+        <a class="lat-item" th:href=" @{/jfu/compra}">
+            <li>
                 <img src="../assets/compra.png" alt="icone de consulta">
                 <span>Consultar compra</span>
-            </a>
-        </li>
+            </li>
+        </a>
     </ul>
 </aside>
 </body>
