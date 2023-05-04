@@ -4,9 +4,63 @@ main{
     grid-template-rows: auto auto auto auto auto ;
 }
 
+.nao-editavel{
+    background-color: #c1c1c1;
+}
+
+
 .adicionar{
     grid-column-start: 3;
     grid-column-end: 3;
     margin: auto 0;
     grid-row: 2;
+}
+
+.alerta {
+	padding: 20px;
+	border: 1px solid gray;
+	border-radius: 3px;
+	margin: auto auto;
+	font-size: 1.2rem;
+    grid-row: 1;
+    grid-column-start: 2;
+    grid-column-end: 5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    visibility: hidden;
+}
+
+.alerta img{
+    height: 40px;
+    width: 40px;
+}
+
+.sucesso {
+	border-color: #00ff84;
+	color: #212121;
+    background-color: #d8e4d7;
+}
+
+.falha {
+    color: #e8273b;
+    color: #212121;
+    background-color: #d8e4d7;
+}
+
+.fadeOut {
+    visibility: hidden;
+    opacity: 0;
+    animation: disappear 1s 6s backwards;
+}
+
+@keyframes disappear {
+    from {
+        visibility: visible;
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
 }

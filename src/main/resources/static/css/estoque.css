@@ -58,6 +58,7 @@
 }
 
 .btn-novo{
+    text-align: center;
     background-color: #52d495;
     border-radius: 4px;
     border: none;
@@ -69,7 +70,7 @@
 }
 
 .btn-novo:hover{
-    background-color: #52d495;
+    background-color: #33b375;
 }
 
 .tabela{
@@ -87,6 +88,14 @@
     padding: 10px;
 }
 
+.tabela .col-1{
+    border-radius: 10px 0 0 0;
+}
+
+.tabela .col-n{
+    border-radius: 0 10px 0 0;
+}
+
 .tabela td{
     text-align: center;
 }
@@ -100,7 +109,7 @@
 .tabela tbody{
     display: block;
     overflow-y: auto;
-    max-height: 520px;
+    max-height: calc(100vh - 250px);
 }
 
 tr:nth-child(even) {

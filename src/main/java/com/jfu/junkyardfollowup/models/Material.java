@@ -23,15 +23,10 @@ public class Material {
 
     @NotNull
     @DecimalMin(value = "0.0", inclusive = false)
-    @Digits(integer=9, fraction=2)
+    @Digits(integer=12, fraction=2)
     private BigDecimal preco;
 
     @NotNull
     @Value("0")
     private BigDecimal quantidade = BigDecimal.valueOf(0.0);
-
-    @Override
-    public String toString() {
-        return getId() + "-" + getNome() + "-" + getPreco();
-    }
 }
