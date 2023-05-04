@@ -46,12 +46,20 @@ public class EstoqueController {
     }
 
     @GetMapping("/consulta")
-    public ModelAndView consultarEstoque(){
+    public ModelAndView consultarEstoque(@RequestParam(defaultValue = "") String searchKey){
         ModelAndView mv = new ModelAndView("est-consultar-estoque");
         mvObjetos(mv);
-        List<Material> materiais = materialRepository.findAll();
+        List<Material> materiais = new ArrayList<>();
+        if(!searchKey.equals("") && searchKey.matches("[+-]?\\d*(\\.\\d+)?")){
+            Optional<Material> optional = materialRepository.findById(Long.parseLong(searchKey));
+            if(optional.isPresent()){
+                materiais.add(optional.get());
+            }
+        }else{
+            materiais.addAll(materialRepository.findByNomeContainingIgnoreCase(searchKey));
+        }
         mv.addObject("materiais", materiais);
-        mv.addObject("atualizado", false);
+        mv.addObject("status", "nenhum");
         return mv;
     }
 
@@ -89,8 +97,32 @@ public class EstoqueController {
         mvObjetos(mv);
         List<Material> materiais = materialRepository.findAll();
         mv.addObject("materiais", materiais);
-        mv.addObject("atualizado", true);
+        mv.addObject("status", "atualizado");
         return mv;
+    }
+
+    @GetMapping("/{id}delete-confirm")
+    public ModelAndView deleteConfirm(@PathVariable Long id){
+        Optional<Material> optional = materialRepository.findById(id);
+        if(optional.isPresent()){
+            Material material = optional.get();
+            ModelAndView mv = new ModelAndView("est-consultar-estoque");
+            mvObjetos(mv);
+            mv.addObject("status", "excluir");
+            mv.addObject("materialNome", material.getNome());
+            mv.addObject("materialId", material.getId());
+            return mv;
+        }
+        return new ModelAndView("redirect:/materiais/consulta");
+    }
+
+    @GetMapping("/{id}delete")
+    public ModelAndView delete(@PathVariable Long id) {
+        Optional<Material> optional = materialRepository.findById(id);
+        if(optional.isPresent()){
+            materialRepository.delete(optional.get());
+        }
+        return new ModelAndView("redirect:/materiais/consulta");
     }
 
     private void mvObjetos(ModelAndView mv){

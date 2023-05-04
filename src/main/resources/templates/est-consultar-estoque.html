@@ -21,12 +21,12 @@
       <header class="header-consulta">
         <h1>Materiais</h1>
         <div class="header-btn">
-          <div class=" barra-de-pesquisa">
-            <input type="text" class="pesquisa-txt" placeholder="Procurar...">
-            <a href="#" class="pesquisa-btn">
+          <form class="barra-de-pesquisa" action="consulta" type="post">
+            <input name="searchKey" type="text" class="pesquisa-txt" placeholder="Procurar...">
+            <button type="submit" class="pesquisa-btn">
               <img src="../assets/pesquisa.svg" alt="Lupa" height="20" width="20">
-            </a>
-          </div>
+            </button>
+          </form>
           <a th:href="@{/materiais/add}" class="btn-novo">Adicionar Material</a>
         </div>
       </header>
@@ -37,7 +37,7 @@
           <th>Material</th>
           <th>Quantidade</th>
           <th>Preço por kg</th>
-          <th class="col-n">Alterações</th>
+          <th class="col-n"></th>
         </tr>
         </thead>
         <tbody>
@@ -45,12 +45,12 @@
           <td scope="row" th:text="${material.id}"></td>
           <td th:text="${material.nome}"></td>
           <td th:text="${material.quantidade}"></td>
-          <td th:text="${material.preco}"></td>
+          <td th:text="'R$ ' + ${material.preco}"></td>
           <td class="td-icons">
             <a th:href="@{/materiais/{materialId}edit(materialId = ${material.id})}" class=".icon-edit">
               <img class="svg-icon" src="/assets/lapis.svg" alt="editar">
             </a>
-            <a href="#" class-=".icon-edit">
+            <a th:href="@{/materiais/{materialId}delete-confirm(materialId = ${material.id})}" class-=".icon-edit">
               <img class="svg-icon" src="/assets/lixeira.svg" alt="excluir">
             </a>
           </td>
@@ -60,10 +60,20 @@
     </section>
   </main>
 </div>
-<div th:class="${atualizado} ? 'janela visivel' : 'janela'">
+<div th:class="${status == 'atualizado'} ? 'janela visivel' : 'janela'">
   <div class="modal">
     <a th:href="@{/materiais/consulta}" class="fechar">X</a>
     <h1>Material atualizado com sucesso</h1>
+  </div>
+</div>
+<div th:class="${status == 'excluir'} ? 'janela visivel' : 'janela'">
+  <div class="modal">
+    <a th:href="@{/materiais/consulta}" class="fechar">X</a>
+    <h1>Deseja mesmo excluir registros de <span th:text="${materialNome}"></span>?</h1>
+    <div class="botoes">
+      <a class="sim" th:href="@{/materiais/{materialId}delete(materialId = ${materialId})}">Excluir</a>
+      <a class="nao" th:href="@{/materiais/consulta}">Cancelar</a>
+    </div>
   </div>
 </div>
 </body>
