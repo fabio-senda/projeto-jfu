@@ -19,6 +19,15 @@ public class RequisicaoMaterial {
     @DecimalMin(value = "0.0", inclusive = false)
     @Digits(integer=12, fraction=2)
     private BigDecimal preco;
+
+    public RequisicaoMaterial(){
+
+    }
+
+    public RequisicaoMaterial(Material material){
+        this.fromMaterial(material);
+    }
+
     public Material toMaterial(){
         Material material = new Material();
         material.setNome(this.getNome());
@@ -26,9 +35,10 @@ public class RequisicaoMaterial {
         return material;
     }
 
-    public void toMaterial(Material material){
+    public Material toMaterial(Material material){
         material.setNome(this.getNome());
         material.setPreco(this.getPreco());
+        return material;
     }
 
     public void fromMaterial(Material material){

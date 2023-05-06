@@ -2,6 +2,7 @@ package com.jfu.junkyardfollowup.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,24 +11,16 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Table(name = "Material")
-@Entity(name = "material")
-public class Material {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Table(name = "Fornecedor")
+@Entity(name = "fornecedor")
+public class Fornecedor{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @EqualsAndHashCode.Include
     @NotBlank
     @Size(max = 60)
-    @Column
     private String nome;
-
-    @NotNull
-    @DecimalMin(value = "0.0", inclusive = false)
-    @Digits(integer=12, fraction=2)
-    private BigDecimal preco;
-
-    @NotNull
-    @Value("0")
-    private BigDecimal quantidade = BigDecimal.valueOf(0.0);
 }

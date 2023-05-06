@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/menu.css">
+  <link rel="stylesheet" href="../css/registrar.css">
+  <link rel="stylesheet" href="../css/adicionar-material.css">
+  <title>Adicionar Fornecedores</title>
+</head>
+
+<body>
+<header th:replace="~{fragments/header-menu :: navigation}"></header>
+<div class="conteudo">
+  <aside th:replace="~{fragments/menu-compra :: aside-compra}"></aside>
+
+  <main>
+    <div th:class="${sucesso} ? 'alerta sucesso fadeOut' : 'alerta sucesso'">
+      <img src="../assets/ok.svg" alt="Erro"> Fornecedor adicionado com sucesso!
+    </div>
+    <form class="adicionar" th:object="${fornecedor}" th:action="@{/fornecedores/add}" method="post">
+      <h1>Adicionar Material</h1>
+      <div class="caixa">
+        <label for="fornecedor">Fornecedor</label>
+        <input id="fornecedor" type="text" th:field="*{nome}" autofocus>
+        <div class="erro" th:errors="*{nome}"></div>
+      </div>
+      <button class="btn-add-mat" type="submit">Adicionar Fornecedor</button>
+    </form>
+  </main>
+
+</div>
+</body>
+
+</html>

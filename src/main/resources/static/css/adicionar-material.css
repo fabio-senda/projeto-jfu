@@ -43,9 +43,14 @@ main{
 }
 
 .falha {
-    color: #e8273b;
+    border-color: #e8273b;
     color: #212121;
-    background-color: #d8e4d7;
+    background-color: #e4d7d7;
+}
+
+.erro{
+    color: #e8273b;
+    font-size: 0.875rem;
 }
 
 .fadeOut {

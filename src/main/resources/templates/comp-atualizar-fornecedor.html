@@ -15,28 +15,23 @@
 <body>
 <header th:replace="~{fragments/header-menu :: navigation}"></header>
 <div class="conteudo">
-    <aside th:replace="~{fragments/menu-estoque :: aside-estoque}"></aside>
+    <aside th:replace="~{fragments/menu-compra :: aside-compra}"></aside>
   <main>
     <div th:class="${falha} ? 'alerta falha fadeOut' : 'alerta falha'">
       <img src="../assets/erro.svg" alt="Erro"> Ocorreu um erro ao atualizar!
     </div>
-    <form class="adicionar" th:object="${material}" th:action="@{/materiais/{materialId}edit(materialId = ${materialId})}" method="post">
-      <h1>Atualizar Material</h1>
+    <form class="adicionar" th:object="${fornecedor}" th:action="@{/fornecedores/{fornecedorId}edit(fornecedorId = ${fornecedorId})}" method="post">
+      <h1>Atualizar Fornecedor</h1>
       <div class="caixa">
         <label for="id">Id</label>
-        <input class="nao-editavel" id="id" type="text" th:value="${materialId}" readonly>
+        <input class="nao-editavel" id="id" type="text" th:value="${fornecedorId}" readonly>
       </div>
       <div class="caixa">
-        <label for="material">Nome</label>
-        <input id="material" type="text" th:field="*{nome}" autofocus>
+        <label for="fornecedor">Nome</label>
+        <input id="fornecedor" type="text" th:field="*{nome}" autofocus>
         <div class="erro" th:errors="*{nome}"></div>
       </div>
-      <div class="caixa">
-        <label for="preco">Preço por kg</label>
-        <input id="preco" step="0.01" type="number"  th:field="*{preco}">
-        <div class="erro" th:errors="*{preco}"></div>
-      </div>
-      <button class="btn-add-mat" type="submit">Atualizar Material</button>
+      <button class="btn-add-mat" type="submit">Atualizar Fornecedor</button>
     </form>
 </main>
 </div>
