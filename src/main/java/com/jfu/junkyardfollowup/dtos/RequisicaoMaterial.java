@@ -1,10 +1,9 @@
-package com.jfu.junkyardfollowup.dto;
+package com.jfu.junkyardfollowup.dtos;
 
 import com.jfu.junkyardfollowup.models.Material;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 
 import java.math.BigDecimal;
 

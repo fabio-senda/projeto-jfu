@@ -30,4 +30,14 @@ public class Material {
     @NotNull
     @Value("0")
     private BigDecimal quantidade = BigDecimal.valueOf(0.0);
+
+    @Override
+    public String toString() {
+        return "Material{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", preco=" + preco +
+                ", quantidade=" + quantidade +
+                '}';
+    }
 }

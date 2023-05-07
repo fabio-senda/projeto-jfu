@@ -52,8 +52,6 @@ main{
     box-sizing: border-box;
 }
 
-
-
 .btn-add-mat {
     background-color: #66e5a7;
     width: 100%;
@@ -100,24 +98,66 @@ main{
     padding: 10px;
 }
 
-.tabela {
+.tabela{
+    background-color: white;
+    margin: 0 0;
+    border-radius: 10px 10px 0 0;
     border-collapse: collapse;
     width: 100%;
-    border-radius: 10px;
+}
+
+.tabela th{
+    color: black;
+    background-color: #d9d9d9;
+    font-weight: 500;
+    padding: 10px;
+    font-size: 1.125rem;
 }
 
 .tabela th, td {
-    padding: 10px;
-    text-align: left;
+    text-align: center;
     border-bottom: 1px solid #000;
 }
 
-.tabela th {
-    background-color: #d9d9d9;
-    font-weight: bold;
-    font-size: 1.25rem;
+.tabela .col-1{
+    border-radius: 10px 0 0 0;
+}
+
+.tabela .col-n{
+    border-radius: 0 10px 0 0;
+}
+
+.tabela thead, .tabela tbody tr {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+}
+
+.tabela tbody{
+    display: block;
+    overflow-y: auto;
+    max-height: calc(100vh - 250px);
 }
 
 tr:nth-child(even) {
-    background-color: #f2f2f2
+    background-color: #f2f2f2;
+}
+
+.td-icons{
+    margin-top: 5px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.svg-icon{
+    width: 20px;
+    height: 20px;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.svg-icon:hover{
+    background-color: #d9d9d9;
 }

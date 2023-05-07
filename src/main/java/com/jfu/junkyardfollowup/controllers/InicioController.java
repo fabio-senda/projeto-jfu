@@ -1,18 +1,25 @@
 package com.jfu.junkyardfollowup.controllers;
 
+import com.jfu.junkyardfollowup.dtos.Login;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/jfu")
 public class InicioController {
+
     @GetMapping("/")
-    public ModelAndView principal(){
-        ModelAndView mv = new ModelAndView("inicio-principal");
-        return mv;
+    public String index(){
+        return "inicio-principal";
     }
+
+    @GetMapping("/login")
+    public ModelAndView login(){
+        return new ModelAndView("login");
+    }
+
     @GetMapping("/compra")
     public ModelAndView compra(){
         ModelAndView mv = new ModelAndView("inicio-compra");

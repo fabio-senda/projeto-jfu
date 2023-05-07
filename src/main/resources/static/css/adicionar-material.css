@@ -4,11 +4,6 @@ main{
     grid-template-rows: auto auto auto auto auto ;
 }
 
-.nao-editavel{
-    background-color: #c1c1c1;
-}
-
-
 .adicionar{
     grid-column-start: 3;
     grid-column-end: 3;

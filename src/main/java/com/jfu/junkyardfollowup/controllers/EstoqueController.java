@@ -1,12 +1,11 @@
 package com.jfu.junkyardfollowup.controllers;
 
-import com.jfu.junkyardfollowup.dto.RequisicaoMaterial;
+import com.jfu.junkyardfollowup.dtos.RequisicaoMaterial;
 import com.jfu.junkyardfollowup.models.Material;
 import com.jfu.junkyardfollowup.repositories.MaterialRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/menu.css">
+  <link rel="stylesheet" href="../css/registrar-compra.css">
+  <link rel="stylesheet" href="../css/modal.css">
+  <title>Adicionar Compra</title>
+</head>
+
+<body>
+<header th:replace="~{fragments/header-menu :: navigation}"></header>
+<div class="conteudo">
+  <aside th:replace="~{fragments/menu-compra :: aside-compra}"></aside>
+  <main>
+    <div class="abas">
+      <span class="aba">
+          <span class="aba-item n-aba">1</span>
+          <span class="aba-item circles">
+              <span class="circle"></span>
+              <span class="circle"></span>
+              <span class="circle"></span>
+          </span>
+      </span>
+    </div>
+    <div class="registrar-compra">
+      <section class="adicionar">
+        <h1>Adicionar Compra</h1>
+        <form th:action="@{/compras/addItem}" th:object="${fornecimento}" method="post">
+          <div class="caixa">
+            <label>Material:</label>
+            <select id="select-material" th:field="*{material}">
+              <option th:each="material : ${materiais}" th:value="${material.id}" th:text="${material.nome}">
+            </select>
+            <div class="erro" th:errors="*{material}"></div>
+          </div>
+          <div class="caixa">
+            <label for="preco">Preço:</label>
+            <input class="nao-editavel" id="preco" type="text" th:field="*{preco}" readonly/>
+          </div>
+          <div class="caixa">
+            <label for="peso">Peso:</label>
+            <input id="peso" type="number" th:field="*{quantidade}"step="0.001" />
+            <div class="erro" th:errors="*{quantidade}"></div>
+          </div>
+          <button class="btn-add-mat" type="submit">Adicionar Item</button>
+        </form>
+        <div class="total">
+          <h2 th:text="'Total: R$ ' + ${total}"></h2>
+        </div>
+        <form th:action="@{/compras/confirmar-registro}" method="get">
+          <button class="btn-registrar" type="submit">Registrar Compra</button>
+        </form>
+      </section>
+
+      <section class="mat-registrados">
+        <table class="tabela">
+          <thead>
+          <tr>
+            <th class-="col-1">Material</th>
+            <th>Quantidade</th>
+            <th>Preço por kg</th>
+            <th>Preço total</th>
+            <th class-="col-n">Alt</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="forn : ${fornecimentos}">
+            <td th:text="${forn.material.nome}"></td>
+            <td th:text="${forn.quantidade} + ' kg'"></td>
+            <td th:text="'R$ ' + ${forn.preco}"></td>
+            <td th:text="'R$ ' + ${forn.total}"></td>
+            <td class="td-icons">
+              <a th:href="@{/compras/{fornId}delete-item-confirm(fornId = ${forn.material.id})}" class-="icon-edit">
+                <img class="svg-icon" src="/assets/lixeira.svg" alt="excluir">
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+</div>
+<div th:class="${status == 'mensagem'} ? 'janela visivel' : 'janela'">
+  <div class="modal">
+    <a th:href="@{/compras/add}"  class="fechar">X</a>
+    <h1 th:text="${mensagem}"></h1>
+  </div>
+</div>
+<div th:class="${status == 'excluir'} ? 'janela visivel' : 'janela'">
+  <div class="modal">
+    <a th:href="@{/compras/add}" class="fechar">X</a>
+    <h1 th:text="${mensagem}"></h1>
+    <div class="botoes">
+      <a class="sim" th:href="@{/compras/{id}delete-item(id = ${id})}">Excluir</a>
+      <a class="nao" th:href="@{/compras/add}">Cancelar</a>
+    </div>
+  </div>
+</div>
+<div th:class="${status == 'registrar'} ? 'janela visivel' : 'janela'">
+  <form class="modal" th:action="@{/compras/new}" th:object="${fornecedor}" method="post">
+    <h1>Confirmar registro?</h1>
+    <div class="caixa">
+      <label>Fornecedor:</label>
+      <select th:field="*{id}">
+        <option th:each="fornec : ${fornecedores}" th:value="${fornec.id}" th:text="${fornec.nome}">
+      </select>
+    </div>
+    <div class="botoes">
+      <button class="sim" type="submit">Confirmar</button>
+      <a class="nao" th:href="@{/compras/add}">Cancelar</a>
+    </div>
+  </form>
+</div>
+</body>
+<script th:inline="javascript">
+  var materiais = /*[[${materiais}]]*/
+  document.getElementById('select-material').onchange = () => {
+      let valorId = document.getElementById('select-material').value
+      let material =  materiais.find(element => element.id == valorId)
+      document.getElementById('preco').value = 'R$ ' + material.preco
+  }
+</script>
+</html>

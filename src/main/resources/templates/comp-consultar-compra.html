@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br"  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/menu.css">
+  <link rel="stylesheet" href="../css/estoque.css">
+  <link rel="stylesheet" href="../css/modal.css">
+  <title>Estoque</title>
+</head>
+
+<body>
+<header th:replace="~{fragments/header-menu :: navigation}"></header>
+<div class="conteudo">
+  <aside th:replace="~{fragments/menu-estoque :: aside-estoque}"></aside>
+  <main>
+    <section class="principal">
+      <header class="header-consulta">
+        <h1>Materiais</h1>
+        <div class="header-btn">
+          <form class="barra-de-pesquisa" action="materiais" type="get">
+            <input name="searchKey" type="text" class="pesquisa-txt" placeholder="Procurar...">
+            <button type="submit" class="pesquisa-btn">
+              <img src="../assets/pesquisa.svg" alt="Lupa" height="20" width="20">
+            </button>
+          </form>
+          <a th:href="@{/materiais/add}" class="btn-novo">Adicionar Material</a>
+        </div>
+      </header>
+      <table class="tabela">
+        <thead>
+        <tr>
+          <th class="col-1">Código</th>
+          <th>Material</th>
+          <th>Quantidade</th>
+          <th>Preço por kg</th>
+          <th class="col-n"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="material : ${materiais}">
+          <td scope="row" th:text="${material.id}"></td>
+          <td th:text="${material.nome}"></td>
+          <td th:text="${material.quantidade}"></td>
+          <td th:text="'R$ ' + ${material.preco}"></td>
+          <td class="td-icons">
+            <a th:href="@{/materiais/{materialId}edit(materialId = ${material.id})}" class=".icon-edit">
+              <img class="svg-icon" src="/assets/lapis.svg" alt="editar">
+            </a>
+            <a th:href="@{/materiais/{materialId}delete-confirm(materialId = ${material.id})}" class-=".icon-edit">
+              <img class="svg-icon" src="/assets/lixeira.svg" alt="excluir">
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+<div th:class="${status == 'mensagem'} ? 'janela visivel' : 'janela'">
+  <div class="modal">
+    <a th:href="@{/materiais}"  class="fechar">X</a>
+    <h1 th:text="${mensagem}"></h1>
+  </div>
+</div>
+<div th:class="${status == 'excluir'} ? 'janela visivel' : 'janela'">
+  <div class="modal">
+    <a th:href="@{/materiais}" class="fechar">X</a>
+    <h1>Deseja mesmo excluir registros de <span th:text="${materialNome}"></span>?</h1>
+    <div class="botoes">
+      <a class="sim" th:href="@{/materiais/{materialId}delete(materialId = ${materialId})}">Excluir</a>
+      <a class="nao" th:href="@{/materiais}">Cancelar</a>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>
