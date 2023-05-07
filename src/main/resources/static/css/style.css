@@ -58,3 +58,7 @@ img {
     border-radius: 5px;
     box-sizing: border-box;
 }
+
+.nao-editavel{
+    background-color: #c1c1c1;
+}

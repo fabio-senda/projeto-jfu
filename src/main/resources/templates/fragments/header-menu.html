@@ -8,7 +8,7 @@
 </head>
 <body>
 <header class="menu-principal" th:fragment="navigation">
-    <a class="logo" th:href="@{/jfu/}">
+    <a class="logo" th:href="@{/index}">
         <img src="../assets/logo.png" alt="logo">
         <h1>JUNK FOLLOW-UP</h1>
     </a>
@@ -16,15 +16,19 @@
         <ul>
             <li>
                 <a th:class="${ativa == 'compra'} ? 'item-menu ativa' : 'item-menu'"
-                   th:href="@{/jfu/compra}">Compra</a>
+                   th:href="@{/compra}">Compra</a>
             </li>
             <li>
                 <a th:class="${ativa == 'venda'} ? 'item-menu ativa' : 'item-menu'"
-                   th:href="@{/jfu/venda}">Venda</a>
+                   th:href="@{/venda}">Venda</a>
             </li>
             <li>
                 <a th:class="${ativa == 'estoque'} ? 'item-menu ativa' : 'item-menu'"
-                   th:href="@{/jfu/estoque}">Estoque</a>
+                   th:href="@{/estoque}">Estoque</a>
+            </li>
+            <li>
+                <a th:class="${ativa == 'funcionarios'} ? 'item-menu ativa' : 'item-menu'"
+                   th:href="@{/funcionarios}">Funcionários</a>
             </li>
         </ul>
     </nav>
