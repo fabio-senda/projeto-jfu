@@ -100,6 +100,7 @@ public class AddCompraController {
         RegistroDeCompra registroDeCompra = new RegistroDeCompra();
         registroDeCompra.setData(LocalDateTime.now());
         registroDeCompra.setFornecedor(fornecedor);
+        registroDeCompra.setQuantidadeDeItens((long) itens1.size());
         compraRepository.save(registroDeCompra);
         for (Fornecimento f: itens1) {
             f.setRegistroDeCompra(registroDeCompra);

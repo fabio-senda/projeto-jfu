@@ -23,6 +23,8 @@ public class RegistroDeCompra {
     @OneToMany
     private List<Fornecimento> fornecimentos;
 
+    private Long quantidadeDeItens;
+
     //@DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime data;
 }
