@@ -32,16 +32,4 @@ public class Fornecimento {
     public void calcularTotal() {
         this.total = preco.multiply(quantidade);
     }
-
-    @Override
-    public String toString() {
-        return "Fornecimento{" +
-                "id=" + id +
-                ", material=" + material +
-                ", registroDeCompra=" + registroDeCompra +
-                ", preco=" + preco +
-                ", quantidade=" + quantidade +
-                ", total=" + total +
-                '}';
-    }
 }

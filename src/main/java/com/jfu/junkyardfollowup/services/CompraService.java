@@ -3,14 +3,18 @@ package com.jfu.junkyardfollowup.services;
 import com.jfu.junkyardfollowup.models.Fornecimento;
 import com.jfu.junkyardfollowup.models.Material;
 import com.jfu.junkyardfollowup.models.RegistroDeCompra;
+import com.jfu.junkyardfollowup.others.Recibo;
 import com.jfu.junkyardfollowup.repositories.CompraRepository;
 import com.jfu.junkyardfollowup.repositories.FornecedorRepository;
 import com.jfu.junkyardfollowup.repositories.FornecimentoRepository;
 import com.jfu.junkyardfollowup.repositories.MaterialRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +32,27 @@ public class CompraService {
 
     @Autowired
     MaterialRepository materialRepository;
+
+    public RegistroDeCompra findById(Long id){
+        return compraRepository.findById(id).orElse(null);
+    }
+
+    public void save(RegistroDeCompra registroDeCompra){
+        compraRepository.save(registroDeCompra);
+    }
+
+    public void delete(RegistroDeCompra registroDeCompra){
+        compraRepository.delete(registroDeCompra);
+    }
+
+
+    public BigDecimal calcularTotal(RegistroDeCompra compra){
+        BigDecimal total = new BigDecimal(0);
+        for (Fornecimento item : compra.getFornecimentos()){
+            total = total.add(item.getTotal());
+        }
+        return total;
+    }
 
     public List<RegistroDeCompra> criarListaCompras(String searchKey){
         List<RegistroDeCompra> compras = new ArrayList<>();
@@ -51,5 +76,18 @@ public class CompraService {
             compras.addAll(compraRepository.findAll());
         }
         return compras;
+    }
+
+    public Recibo gerarRecibo(Long id, HttpServletResponse response){
+        RegistroDeCompra compra = findById(id);
+        List<Fornecimento> itens = compra.getFornecimentos();
+        Recibo recibo = null;
+        if(compra != null){
+            recibo = new Recibo(compra);
+            recibo.gerarCabecalho();
+            recibo.gerarCorpo();
+            recibo.gerarRodape();
+        }
+        return recibo;
     }
 }

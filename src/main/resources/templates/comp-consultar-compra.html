@@ -15,7 +15,7 @@
 <body>
 <header th:replace="~{fragments/header-menu :: navigation}"></header>
 <div class="conteudo">
-  <aside th:replace="~{fragments/menu-estoque :: aside-estoque}"></aside>
+  <aside th:replace="~{fragments/menu-compra :: aside-compra}"></aside>
   <main>
     <section class="principal">
       <header class="header-consulta">
@@ -69,7 +69,7 @@
 <div th:class="${status == 'excluir'} ? 'janela visivel' : 'janela'">
   <div class="modal">
     <a th:href="@{/compras}" class="fechar">X</a>
-    <h1>Deseja mesmo excluir registros da compra #<span th:text="${compraId}"></span>?</h1>
+    <h1>Deseja mesmo excluir registro da compra #<span th:text="${compraId}"></span>?</h1>
     <div class="botoes">
       <a class="sim" th:href="@{/compras/{compraId}delete(compraId = ${compraId})}">Excluir</a>
       <a class="nao" th:href="@{/compras}">Cancelar</a>
