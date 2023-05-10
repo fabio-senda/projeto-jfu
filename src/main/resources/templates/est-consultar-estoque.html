@@ -44,7 +44,7 @@
         <tr th:each="material : ${materiais}">
           <td scope="row" th:text="${material.id}"></td>
           <td th:text="${material.nome}"></td>
-          <td th:text="${material.quantidade}"></td>
+          <td th:text="${material.quantidade} + 'kg'"></td>
           <td th:text="'R$ ' + ${material.preco}"></td>
           <td class="td-icons">
             <a th:href="@{/materiais/{materialId}edit(materialId = ${material.id})}" class=".icon-edit">

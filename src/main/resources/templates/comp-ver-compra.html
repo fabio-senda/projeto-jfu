@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/menu.css">
+  <link rel="stylesheet" href="../css/registrar-compra.css">
+<!--  <link rel="stylesheet" href="../css/adicionar-material.css">-->
+  <title>Menu</title>
+</head>
+
+<body>
+<header th:replace="~{fragments/header-menu :: navigation}"></header>
+<div class="conteudo">
+  <aside th:replace="~{fragments/menu-compra :: aside-compra}"></aside>
+
+  <main>
+    <div th:class="${sucesso} ? 'alerta sucesso fadeOut' : 'alerta sucesso'">
+      <img src="../assets/ok.svg" alt="Erro"> Compra adicionada com sucesso!
+    </div>
+      <h1 th:text="'Compra #' + ${idCompra}"></h1>
+      <h2 th:text="'Fornecedor: ' + ${fornecedor}"></h2>
+      <h2 th:text="'Data: ' + ${data}"></h2>
+    <table class="tabela">
+      <thead>
+      <tr>
+        <th class="col-1">Material</th>
+        <th>Quantidade</th>
+        <th>Preço por kg</th>
+        <th class="col-n">Total</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="f : ${fornecimentos}">
+        <td scope="row" th:text="${f.material.nome}"></td>
+        <td th:text="${f.quantidade} + 'kg'"></td>
+        <td th:text="'R$ ' + ${f.preco}"></td>
+        <td th:text="'R$ ' + ${f.total}"></td>
+<!--        <td class="td-icons">-->
+<!--          <a th:href="@{/materiais/{materialId}edit(materialId = ${material.id})}" class=".icon-edit">-->
+<!--            <img class="svg-icon" src="/assets/lapis.svg" alt="editar">-->
+<!--          </a>-->
+<!--          <a th:href="@{/materiais/{materialId}delete-confirm(materialId = ${material.id})}" class-=".icon-edit">-->
+<!--            <img class="svg-icon" src="/assets/lixeira.svg" alt="excluir">-->
+<!--          </a>-->
+<!--        </td>-->
+      </tr>
+      </tbody>
+      <a th:href="@{/compras/{id}gerar-pdf(id = ${idCompra})}">Emitir recibo</a>
+      <a>Excluir</a>
+    </table>
+  </main>
+
+</div>
+</body>
+
+</html>

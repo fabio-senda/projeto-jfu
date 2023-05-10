@@ -20,7 +20,7 @@ public class RegistroDeCompra {
     @JoinColumn(name="fornecedor_id", nullable = false)
     private Fornecedor fornecedor;
 
-    @OneToMany
+    @OneToMany(mappedBy="registroDeCompra")
     private List<Fornecimento> fornecimentos;
 
     private Long quantidadeDeItens;

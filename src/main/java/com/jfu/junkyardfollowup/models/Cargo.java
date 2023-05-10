@@ -21,7 +21,7 @@ public class Cargo implements GrantedAuthority {
     private NomeCargo nomeCargo;
 
     @ManyToMany
-    private Collection<Funcionario> users;
+    private Collection<Funcionario> funcionario;
 
     @Override
     public String getAuthority() {

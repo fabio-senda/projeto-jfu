@@ -1,5 +1,6 @@
 package com.jfu.junkyardfollowup.dtos;
 
+import com.jfu.junkyardfollowup.models.Fornecedor;
 import com.jfu.junkyardfollowup.models.Fornecimento;
 import com.jfu.junkyardfollowup.models.Material;
 import jakarta.validation.constraints.DecimalMin;
@@ -32,6 +33,14 @@ public class FornecimentoDto {
         fornecimento.setQuantidade(this.quantidade);
         fornecimento.setTotal(fornecimento.getPreco().multiply(this.quantidade).setScale(2, RoundingMode.HALF_EVEN));
         return fornecimento;
+    }
+
+    public void fromFornecimento(Fornecimento fornecimento){
+        FornecimentoDto fornecimentoDto = new FornecimentoDto();
+        fornecimentoDto.setMaterial(fornecimento.getMaterial());
+        fornecimentoDto.setPreco(fornecimentoDto.getPreco());
+        fornecimentoDto.setQuantidade(fornecimento.getQuantidade());
+        fornecimentoDto.setTotal(fornecimento.getTotal());
     }
 
     @Override

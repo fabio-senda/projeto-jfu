@@ -22,7 +22,7 @@
         <h1>Compras</h1>
         <div class="header-btn">
           <form class="barra-de-pesquisa" action="compras" type="get">
-            <input name="searchKey" type="text" class="pesquisa-txt" placeholder="Procurar...">
+            <input name="searchKey" type="number" class="pesquisa-txt" placeholder="Procurar...">
             <button type="submit" class="pesquisa-btn">
               <img src="../assets/pesquisa.svg" alt="Lupa" height="20" width="20">
             </button>
@@ -47,7 +47,7 @@
           <td th:text="${compra.quantidadeDeItens}"></td>
           <td th:text="${compra.data}"></td>
           <td class="td-icons">
-            <a th:href="@{/compras/{compraId}edit(compraId = ${compra.id})}" class=".icon-edit">
+            <a th:href="@{/compras/{compraId}detalhes(compraId = ${compra.id})}" class=".icon-edit">
               <img class="svg-icon" src="/assets/lapis.svg" alt="editar">
             </a>
             <a th:href="@{/compras/{compraId}delete-confirm(compraId = ${compra.id})}" class-=".icon-edit">

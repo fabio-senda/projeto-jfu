@@ -1,7 +1,8 @@
 package com.jfu.junkyardfollowup.controllers;
 
+import com.jfu.junkyardfollowup.dtos.FornecimentoDto;
+import com.jfu.junkyardfollowup.models.Fornecimento;
 import com.jfu.junkyardfollowup.models.RegistroDeCompra;
-import com.jfu.junkyardfollowup.others.Recibo;
 import com.jfu.junkyardfollowup.services.CompraService;
 import com.lowagie.text.DocumentException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,9 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 @RequestMapping("/compras")
@@ -50,20 +50,18 @@ public class CompraController {
 
     @GetMapping("/{id}gerar-pdf")
     public void exportToPDF(@PathVariable Long id, HttpServletResponse response) throws DocumentException, IOException {
-        response.setContentType("application/pdf");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
+        compraService.gerarRecibo(id, response);
+    }
 
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=compra" + currentDateTime + ".pdf";
-        response.setHeader(headerKey, headerValue);
-
-        Recibo recibo = compraService.gerarRecibo(id, response);
-        try {
-            recibo.export(response);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    @GetMapping("/{id}detalhes")
+    public ModelAndView detalhes(@PathVariable Long id){
+        RegistroDeCompra compra = compraService.findById(id);
+        if(compra != null){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss");
+            String data = compra.getData().format(formatter);
+            return mvDetalhesAddObjetos(id, compra.getFornecedor().getNome(), data, compra.getFornecimentos(), false);
         }
+        return new ModelAndView("redirect:/compras");
     }
 
     private void mvObjetos(ModelAndView mv){
@@ -77,6 +75,17 @@ public class CompraController {
         mv.addObject("compraId", compraId);
         mv.addObject("status", status);
         mv.addObject("mensagem", mensagem);
+        return mv;
+    }
+
+    private ModelAndView mvDetalhesAddObjetos(Long idCompra, String fornecedor, String data, List<Fornecimento> fornecimentos, Boolean sucesso){
+        ModelAndView mv = new ModelAndView("comp-ver-compra");
+        mvObjetos(mv);
+        mv.addObject("idCompra", idCompra);
+        mv.addObject("fornecedor", fornecedor);
+        mv.addObject("data", data);
+        mv.addObject("fornecimentos", fornecimentos);
+        mv.addObject("sucesso", sucesso);
         return mv;
     }
 

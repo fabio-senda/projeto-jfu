@@ -104,6 +104,8 @@ public class AddCompraController {
         compraRepository.save(registroDeCompra);
         for (Fornecimento f: itens1) {
             f.setRegistroDeCompra(registroDeCompra);
+            f.getMaterial().setQuantidade(f.getMaterial().getQuantidade().add(f.getQuantidade()));
+            materialRepository.save(f.getMaterial());
             fornecimentoRepository.save(f);
         }
         itens1.clear();

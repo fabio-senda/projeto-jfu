@@ -33,7 +33,8 @@
         <form th:action="@{/compras/addItem}" th:object="${fornecimento}" method="post">
           <div class="caixa">
             <label>Material:</label>
-            <select id="select-material" th:field="*{material}">
+            <select id="select-material" th:field="*{material}" value="999">
+              <option disabled="disabled" selected value="999">Selecione um material</option>
               <option th:each="material : ${materiais}" th:value="${material.id}" th:text="${material.nome}">
             </select>
             <div class="erro" th:errors="*{material}"></div>

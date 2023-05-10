@@ -10,12 +10,19 @@ import com.jfu.junkyardfollowup.repositories.FornecimentoRepository;
 import com.jfu.junkyardfollowup.repositories.MaterialRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.DateFormatter;
 import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,7 +74,7 @@ public class CompraService {
             if (fornecimentos != null && !fornecimentos.isEmpty()) {
                 for (Fornecimento f  : fornecimentos){
                     optional = compraRepository.findById(f.getRegistroDeCompra().getId());
-                    if(optional.isPresent()){
+                    if(optional.isPresent() && f.getRegistroDeCompra().getId() != f.getId()){
                         compras.add(optional.get());
                     }
                 }
@@ -78,16 +85,21 @@ public class CompraService {
         return compras;
     }
 
-    public Recibo gerarRecibo(Long id, HttpServletResponse response){
+    public List<Fornecimento> listaDeItens(RegistroDeCompra compra){
+        return (List<Fornecimento>) fornecimentoRepository.findAllByCompraId(compra.getId());
+    }
+
+    public void gerarRecibo(Long id, HttpServletResponse response) throws IOException {
         RegistroDeCompra compra = findById(id);
-        List<Fornecimento> itens = compra.getFornecimentos();
-        Recibo recibo = null;
-        if(compra != null){
-            recibo = new Recibo(compra);
-            recibo.gerarCabecalho();
-            recibo.gerarCorpo();
-            recibo.gerarRodape();
-        }
-        return recibo;
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=Compra#" + id + "_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        Recibo exporter = new Recibo(compra, listaDeItens(compra), calcularTotal(compra));
+        exporter.export(response);
     }
 }
