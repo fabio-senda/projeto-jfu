@@ -1,6 +1,8 @@
 package com.jfu.junkyardfollowup.controllers;
 
 import com.jfu.junkyardfollowup.models.Fornecedor;
+import com.jfu.junkyardfollowup.models.RegistroDeCompra;
+import com.jfu.junkyardfollowup.repositories.CompraRepository;
 import com.jfu.junkyardfollowup.repositories.FornecedorRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ import java.util.Optional;
 public class FornecedorController {
     @Autowired
     FornecedorRepository fornecedorRepository;
+
+    @Autowired
+    CompraRepository compraRepository;
 
     @GetMapping
     public ModelAndView consultarFornecedor(@RequestParam(defaultValue = "") String searchKey){
@@ -80,8 +85,12 @@ public class FornecedorController {
         Optional<Fornecedor> optional = fornecedorRepository.findById(id);
         if(optional.isPresent()){
             Fornecedor fornecedor = optional.get();
-            fornecedorRepository.delete(fornecedor);
-            return mvConsultarAddObjetos("", id, "mensagem","Fornecedor excluído com sucesso", fornecedor.getNome());
+            List<RegistroDeCompra> compras = compraRepository.findByFornecedor(fornecedor);
+            if (compras.isEmpty()) {
+                fornecedorRepository.delete(fornecedor);
+                return mvConsultarAddObjetos("", id, "mensagem","Fornecedor excluído com sucesso", fornecedor.getNome());
+            }
+            return mvConsultarAddObjetos("", id, "mensagem","Erro ao excluir! Existem registros de compra de " + fornecedor.getNome(),"nenhum");
         }
         return mvConsultarAddObjetos("", id, "mensagem","Ocorreu um erro ao excluir","nenhum");
     }

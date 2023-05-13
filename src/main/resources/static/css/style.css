@@ -62,3 +62,8 @@ img {
 .nao-editavel{
     background-color: #c1c1c1;
 }
+
+.erro{
+    color: #e8273b;
+    font-size: 0.875rem;
+}

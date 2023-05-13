@@ -1,8 +1,11 @@
 package com.jfu.junkyardfollowup.controllers;
 
-import com.jfu.junkyardfollowup.dtos.RequisicaoMaterial;
+import com.jfu.junkyardfollowup.dtos.MaterialDto;
+import com.jfu.junkyardfollowup.models.Fornecimento;
 import com.jfu.junkyardfollowup.models.Material;
+import com.jfu.junkyardfollowup.repositories.FornecimentoRepository;
 import com.jfu.junkyardfollowup.repositories.MaterialRepository;
+import com.jfu.junkyardfollowup.services.MaterialService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,9 +20,12 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/materiais")
-public class EstoqueController {
+public class MaterialController {
     @Autowired
-    MaterialRepository materialRepository;
+    MaterialService materialService;
+
+    @Autowired
+    FornecimentoRepository fornecimentoRepository;
 
     @GetMapping
     public ModelAndView consultarEstoque(@RequestParam(defaultValue = "") String searchKey){
@@ -27,47 +33,47 @@ public class EstoqueController {
     }
     @GetMapping("/add")
     public ModelAndView telaAddMaterial(){
-        return mvAdicionarAddObjetos(false, new RequisicaoMaterial());
+        return mvAdicionarAddObjetos(false, new MaterialDto());
     }
 
     @PostMapping("/add")
-    public ModelAndView addMaterial(@ModelAttribute("material") @Valid RequisicaoMaterial requisicaoMaterial,
+    public ModelAndView addMaterial(@ModelAttribute("material") @Valid MaterialDto materialDto,
                                     BindingResult result, RedirectAttributes redirect){
         if(result.hasErrors()){
-            return mvAdicionarAddObjetos(false, requisicaoMaterial);
+            return mvAdicionarAddObjetos(false, materialDto);
         }
-        materialRepository.save(requisicaoMaterial.toMaterial());
-        return mvAdicionarAddObjetos(true, new RequisicaoMaterial());
+        materialService.save(materialDto.toMaterial());
+        return mvAdicionarAddObjetos(true, new MaterialDto());
     }
 
     @GetMapping("/{id}edit")
     public ModelAndView edit(@PathVariable Long id){
-        Optional<Material> optional = materialRepository.findById(id);
+        Optional<Material> optional = materialService.findById(id);
         if (optional.isPresent()) {
             Material material = optional.get();
-            return mvAtualizarAddObjetos(false, new RequisicaoMaterial(material), material.getId());
+            return mvAtualizarAddObjetos(false, new MaterialDto(material), material.getId());
         }
         return new ModelAndView("redirect:/materiais");
     }
 
     @PostMapping("/{id}edit")
-    public ModelAndView update(@PathVariable Long id, @ModelAttribute("material") @Valid RequisicaoMaterial requisicaoMaterial,
+    public ModelAndView update(@PathVariable Long id, @ModelAttribute("material") @Valid MaterialDto materialDto,
                                BindingResult result, RedirectAttributes redirect){
-        Optional<Material> optional = materialRepository.findById(id);
+        Optional<Material> optional = materialService.findById(id);
         if (result.hasErrors()) {
-            return mvAtualizarAddObjetos(false, requisicaoMaterial, id);
+            return mvAtualizarAddObjetos(false, materialDto, id);
         }
         if (optional.isEmpty()) {
-            return mvAtualizarAddObjetos(true, requisicaoMaterial, id);
+            return mvAtualizarAddObjetos(true, materialDto, id);
         }
         Material material = optional.get();
-        materialRepository.save(requisicaoMaterial.toMaterial(material));
+        materialService.save(materialDto.toMaterial(material));
         return mvConsultarAddObjetos("", 0l, "mensagem","Material atualizado com sucesso", "nenhum");
     }
 
     @GetMapping("/{id}delete-confirm")
     public ModelAndView deleteConfirm(@PathVariable Long id){
-        Optional<Material> optional = materialRepository.findById(id);
+        Optional<Material> optional = materialService.findById(id);
         if(optional.isPresent()){
             Material material = optional.get();
             return mvConsultarAddObjetos("", id, "excluir","nenhum", material.getNome());
@@ -77,24 +83,25 @@ public class EstoqueController {
 
     @GetMapping("/{id}delete")
     public ModelAndView delete(@PathVariable Long id) {
-        Optional<Material> optional = materialRepository.findById(id);
-        if(optional.isPresent()){
+        Optional<Material> optional = materialService.findById(id);
+        List<Fornecimento> fornecimentos = fornecimentoRepository.findAllByMaterial_Id(id);
+        if(optional.isPresent() && fornecimentos.isEmpty()){
             Material material = optional.get();
-            materialRepository.delete(material);
+            materialService.delete(material);
             return mvConsultarAddObjetos("", id, "mensagem","Material excluído com sucesso", material.getNome());
         }
-        return mvConsultarAddObjetos("", id, "mensagem","Ocorreu um erro ao excluir","nenhum");
+        return mvConsultarAddObjetos("", id, "mensagem","Ocorreu um erro ao excluir, podem haver registros de compra com este material","nenhum");
     }
 
     private void mvObjetos(ModelAndView mv){
         mv.addObject("ativa", "estoque");
     }
 
-    private ModelAndView mvAdicionarAddObjetos(Boolean sucesso, RequisicaoMaterial requisicaoMaterial){
+    private ModelAndView mvAdicionarAddObjetos(Boolean sucesso, MaterialDto materialDto){
         ModelAndView mv = new ModelAndView("est-adicionar-material");
         mvObjetos(mv);
         mv.addObject("sucesso", sucesso);
-        mv.addObject("material", requisicaoMaterial);
+        mv.addObject("material", materialDto);
         return mv;
     }
 
@@ -109,11 +116,11 @@ public class EstoqueController {
         return mv;
     }
 
-    private ModelAndView mvAtualizarAddObjetos(Boolean falha, RequisicaoMaterial requisicaoMaterial, Long materialId){
+    private ModelAndView mvAtualizarAddObjetos(Boolean falha, MaterialDto materialDto, Long materialId){
         ModelAndView mv = new ModelAndView("est-atualizar-material");
         mvObjetos(mv);
         mv.addObject("falha", falha);
-        mv.addObject("material", requisicaoMaterial);
+        mv.addObject("material", materialDto);
         mv.addObject("materialId", materialId);
         return mv;
     }
@@ -121,12 +128,12 @@ public class EstoqueController {
     private List<Material> criarListaMateriais(String searchKey){
         List<Material> materiais = new ArrayList<>();
         if(!searchKey.equals("") && searchKey.matches("[+-]?\\d*(\\.\\d+)?")){
-            Optional<Material> optional = materialRepository.findById(Long.parseLong(searchKey));
+            Optional<Material> optional = materialService.findById(Long.parseLong(searchKey));
             if(optional.isPresent()){
                 materiais.add(optional.get());
             }
         }else{
-            materiais.addAll(materialRepository.findByNomeContainingIgnoreCase(searchKey));
+            materiais.addAll(materialService.findByNomeContainingIgnoreCase(searchKey));
         }
         return materiais;
     }

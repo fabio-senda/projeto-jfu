@@ -17,10 +17,11 @@ import java.math.BigDecimal;
 public class Fornecedor{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Positive(message = "Preecha o campo")
     private Long id;
 
     @EqualsAndHashCode.Include
-    @NotBlank
+    @NotBlank(message = "Preencha o campo")
     @Size(max = 60)
     private String nome;
 }

@@ -1,6 +1,6 @@
 package com.jfu.junkyardfollowup.controllers;
 
-import com.jfu.junkyardfollowup.dtos.FornecimentoDto;
+import com.jfu.junkyardfollowup.dtos.CompraDto;
 import com.jfu.junkyardfollowup.models.Fornecimento;
 import com.jfu.junkyardfollowup.models.RegistroDeCompra;
 import com.jfu.junkyardfollowup.services.CompraService;
@@ -43,7 +43,7 @@ public class CompraController {
         RegistroDeCompra compra = compraService.findById(id);
         if (compra != null){
             compraService.delete(compra);
-            return mvConsultarAddObjetos("", id, "mensagem","Compra #" + id + "excluída com sucesso!");
+            return mvConsultarAddObjetos("", id, "mensagem","Compra #" + id + " excluída com sucesso!");
         }
         return mvConsultarAddObjetos("", id, "mensagem","Ocorreu um erro ao excluir a compra!");
     }
@@ -57,9 +57,8 @@ public class CompraController {
     public ModelAndView detalhes(@PathVariable Long id){
         RegistroDeCompra compra = compraService.findById(id);
         if(compra != null){
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss");
-            String data = compra.getData().format(formatter);
-            return mvDetalhesAddObjetos(id, compra.getFornecedor().getNome(), data, compra.getFornecimentos(), false);
+            CompraDto compraDto = CompraDto.fromRegistroDeCompra(compra);
+            return mvDetalhesAddObjetos(id, compra.getFornecedor().getNome(), compraDto.getData(), compra.getFornecimentos(), false);
         }
         return new ModelAndView("redirect:/compras");
     }

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class RequisicaoMaterial {
+public class MaterialDto {
     @NotBlank
     @Size(max = 60)
     private String nome;
@@ -19,11 +19,11 @@ public class RequisicaoMaterial {
     @Digits(integer=12, fraction=2)
     private BigDecimal preco;
 
-    public RequisicaoMaterial(){
+    public MaterialDto(){
 
     }
 
-    public RequisicaoMaterial(Material material){
+    public MaterialDto(Material material){
         this.fromMaterial(material);
     }
 

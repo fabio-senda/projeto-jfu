@@ -9,6 +9,8 @@ import com.jfu.junkyardfollowup.repositories.CompraRepository;
 import com.jfu.junkyardfollowup.repositories.FornecedorRepository;
 import com.jfu.junkyardfollowup.repositories.FornecimentoRepository;
 import com.jfu.junkyardfollowup.repositories.MaterialRepository;
+import com.jfu.junkyardfollowup.services.CompraService;
+import com.jfu.junkyardfollowup.services.MaterialService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -27,10 +30,10 @@ import java.util.List;
 @RequestMapping("/compras")
 public class AddCompraController {
     @Autowired
-    private MaterialRepository materialRepository;
+    private MaterialService materialService;
 
     @Autowired
-    private CompraRepository compraRepository;
+    private CompraService compraService;
 
     @Autowired
     private FornecimentoRepository fornecimentoRepository;
@@ -44,8 +47,8 @@ public class AddCompraController {
 
     @GetMapping("/add")
     public ModelAndView telaAdd(){
-        return mvAdicionarAddObjetos(listaMaterialOrdenada(), new FornecimentoDto(), itens1,
-                "nenhum", "nenhum",
+        return mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
+                "nenhum", "nenhum", new Fornecedor(),
                 null, calcularTotal());
     }
 
@@ -54,8 +57,8 @@ public class AddCompraController {
                                 BindingResult result, RedirectAttributes redirect){
         boolean flag = true;
         if(result.hasErrors()){
-            return mvAdicionarAddObjetos(listaMaterialOrdenada(), fornecimentoDto, itens1,
-                    "nenhum", "nenhum",
+            return mvAdicionarAddObjetos(fornecimentoDto, itens1,
+                    "nenhum", "nenhum", new Fornecedor(),
                     null, calcularTotal());
         }
         BigDecimal total = new BigDecimal(0);
@@ -76,46 +79,45 @@ public class AddCompraController {
                 itens1.add(fornecimento);
             }
         }
-        return mvAdicionarAddObjetos(listaMaterialOrdenada(), new FornecimentoDto(), itens1,
-                "nenhum", "nenhum",
+        return mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
+                "nenhum", "nenhum", new Fornecedor(),
                 null, total);
     }
 
 
     @GetMapping("/confirmar-registro")
     public ModelAndView finalizar(){
-        return mvAdicionarAddObjetos(null, new FornecimentoDto(), itens1,
-                "registrar", "Confirmar registro de compra?",
+        return mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
+                "registrar", "Confirmar registro de compra?", new Fornecedor(),
                 listaFornecedores(), calcularTotal());
     }
 
     @PostMapping("/new")
     public ModelAndView novo(@ModelAttribute("fornecedor") @Valid Fornecedor fornecedor,
                              BindingResult result, RedirectAttributes redirect){
+        if(result.getErrorCount() > 1){
+            return mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
+                    "registrar", "Confirmar registro de compra?", fornecedor,
+                    listaFornecedores(), calcularTotal());
+        }
         if(itens1.size() == 0){
-            return mvAdicionarAddObjetos(listaMaterialOrdenada(), new FornecimentoDto(), itens1,
+            return mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
                     "mensagem", "É preciso adicionar pelo menos um item",
-                    null, calcularTotal());
+                    new Fornecedor(), null, calcularTotal());
         }
         RegistroDeCompra registroDeCompra = new RegistroDeCompra();
-        registroDeCompra.setData(LocalDateTime.now());
+        registroDeCompra.setData(LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime());
         registroDeCompra.setFornecedor(fornecedor);
         registroDeCompra.setQuantidadeDeItens((long) itens1.size());
-        compraRepository.save(registroDeCompra);
-        for (Fornecimento f: itens1) {
-            f.setRegistroDeCompra(registroDeCompra);
-            f.getMaterial().setQuantidade(f.getMaterial().getQuantidade().add(f.getQuantidade()));
-            materialRepository.save(f.getMaterial());
-            fornecimentoRepository.save(f);
-        }
+        registroDeCompra = compraService.save(registroDeCompra, itens1);
         itens1.clear();
-        return new ModelAndView("inicio-principal");
+        return new ModelAndView("redirect:/compras/" + registroDeCompra.getId() + "detalhes");
     }
 
     @GetMapping("/{id}delete-item-confirm")
     public ModelAndView confirmar(@PathVariable Long id){
-        ModelAndView mv = mvAdicionarAddObjetos(null, new FornecimentoDto(), itens1,
-                "excluir", "Excluir item?",
+        ModelAndView mv = mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
+                "excluir", "Excluir item?", new Fornecedor(),
                 listaFornecedores(), calcularTotal());
         mv.addObject("id", id);
         return mv;
@@ -125,7 +127,7 @@ public class AddCompraController {
     public ModelAndView deleteItem(@PathVariable Long id){
         Fornecimento f = null;
         for (Fornecimento fornecimento : itens1){
-            if(fornecimento.getMaterial().getId() == id){
+            if(fornecimento.getMaterial().getId().equals(id)){
                 f = fornecimento;
             }
         }
@@ -133,10 +135,6 @@ public class AddCompraController {
             itens1.remove(f);
         }
         return new ModelAndView("redirect:/compras/add");
-    }
-
-    private List<Material> listaMaterialOrdenada(){
-        return materialRepository.findAll().stream().sorted(Comparator.comparing(Material::getNome)).toList();
     }
 
     private BigDecimal calcularTotal(){
@@ -155,26 +153,15 @@ public class AddCompraController {
         mv.addObject("ativa", "compra");
     }
 
-    /**
-     *
-     * @param materiais options do select material
-     * @param fornecimento form adicionar item
-     * @param fornecimentos dados da tabela
-     * @param status modal de tipos diferentes 'excluir', 'registrar' ou 'mensagem'
-     * @param mensagem texto de ambos status
-     * @param fornecedores lista de fornecedores para o modal
-     * @param total texto do preço total da compra
-     * @return view
-     */
-    private ModelAndView mvAdicionarAddObjetos(List<Material> materiais, FornecimentoDto fornecimento, List<Fornecimento> fornecimentos, String status, String mensagem, List<Fornecedor> fornecedores, BigDecimal total){
+    private ModelAndView mvAdicionarAddObjetos(FornecimentoDto fornecimento, List<Fornecimento> fornecimentos, String status, String mensagem, Fornecedor fornecedor, List<Fornecedor> fornecedores, BigDecimal total){
         ModelAndView mv = new ModelAndView("comp-adicionar-compra");
         mvAddObjetos(mv);
-        mv.addObject("materiais", materiais);
+        mv.addObject("materiais", materialService.listaMaterialComLocais());
         mv.addObject("fornecimento", fornecimento);
         mv.addObject("fornecimentos", fornecimentos);
         mv.addObject("status", status);
         mv.addObject("mensagem", mensagem);
-        mv.addObject("fornecedor", new Fornecedor());
+        mv.addObject("fornecedor", fornecedor);
         mv.addObject("fornecedores", fornecedores);
         mv.addObject("total", total);
         return mv;

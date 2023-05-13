@@ -43,11 +43,6 @@ main{
     background-color: #e4d7d7;
 }
 
-.erro{
-    color: #e8273b;
-    font-size: 0.875rem;
-}
-
 .fadeOut {
     visibility: hidden;
     opacity: 0;

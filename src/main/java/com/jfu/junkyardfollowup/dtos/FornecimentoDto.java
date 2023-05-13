@@ -15,7 +15,7 @@ import java.math.RoundingMode;
 @Getter
 @Setter
 public class FornecimentoDto {
-    @NotNull
+    @NotNull(message = "Preencha o campo")
     private Material material;
     @NotBlank
     private String preco;

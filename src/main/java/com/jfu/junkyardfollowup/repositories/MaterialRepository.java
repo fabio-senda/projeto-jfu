@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface MaterialRepository extends JpaRepository<Material, Long> {
-    public List<Material> findByIdOrNomeContainingIgnoreCase(Long key1, String key2);
+    // public List<Material> findByIdOrNomeContainingIgnoreCase(Long key1, String key2);
     public Optional<Material> findById(Long id);
     public List<Material> findByNomeContainingIgnoreCase(String key);
 }
