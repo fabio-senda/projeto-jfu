@@ -132,6 +132,12 @@ tr:nth-child(even) {
     border-radius: 10px;
 }
 
+.svg-info{
+    width: 25px;
+    height: 25px;
+    padding: 7.5px
+}
+
 .svg-icon:hover{
     background-color: #d9d9d9;
 }

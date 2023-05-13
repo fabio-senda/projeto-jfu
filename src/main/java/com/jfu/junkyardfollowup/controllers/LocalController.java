@@ -5,6 +5,7 @@ import com.jfu.junkyardfollowup.enums.StatusLocal;
 import com.jfu.junkyardfollowup.models.Local;
 import com.jfu.junkyardfollowup.models.Material;
 import com.jfu.junkyardfollowup.repositories.LocalRepository;
+import com.jfu.junkyardfollowup.services.LocalService;
 import com.jfu.junkyardfollowup.services.MaterialService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +25,7 @@ import java.util.*;
 @RequestMapping("/locais")
 public class LocalController {
     @Autowired
-    LocalRepository localRepository;
+    LocalService localService;
 
     @Autowired
     MaterialService materialService;
@@ -44,13 +45,13 @@ public class LocalController {
         if (result.getErrorCount() > 1){
             return mvAdicionarAddObjetos(false, localDto);
         }
-        localRepository.save(localDto.toLocal());
+        localService.save(localDto.toLocal());
         return mvAdicionarAddObjetos(true, new LocalDto());
     }
 
     @GetMapping("/{id}edit")
     public ModelAndView edit(@PathVariable Long id){
-        Optional<Local> optional = localRepository.findById(id);
+        Optional<Local> optional = localService.findById(id);
         if (optional.isPresent()){
             LocalDto local = new LocalDto();
             local.fromLocal(optional.get());
@@ -65,33 +66,28 @@ public class LocalController {
         if(result.hasErrors()){
             return mvAtualizarAddObjetos(true, "Preencha os campos corretamente", localDto, id);
         }
-        Optional<Local> optional = localRepository.findById(id);
+        Optional<Local> optional = localService.findById(id);
         if(optional.isPresent()){
             Local local = optional.get();
-            if (local.getStatus() == StatusLocal.Ativo) {
-                List<Local> locais = localRepository.findByMaterialAndStatus(local.getMaterial(), StatusLocal.Ativo);
-                if (locais.size() == 1)
-                    if(localDto.getStatus() != StatusLocal.Ativo || !localDto.getMaterial().equals(local.getMaterial())) {
+            switch (localService.update(local, localDto)) {
+                case "sucesso" -> {
+                    return mvConsultarAddObjetos("", id, "mensagem", "Local atualizado com sucesso!");
+                }
+                case "falha quantidade" -> {
+                    return mvAtualizarAddObjetos(true, "Ainda há " + local.getMaterial().getNome() + " no local", localDto, id);
+                }
+                case "falha ativo" -> {
                     return mvAtualizarAddObjetos(true, "Não há locais ativos para " + local.getMaterial().getNome(), localDto, id);
                 }
+                default -> {}
             }
-            if (local.getQuantidade().doubleValue() == 0 ||
-                    local.getMaterial().getId().equals(localDto.getMaterial().getId())) {
-                Local localNovo = localDto.toLocal();
-                localNovo.setId(id);
-                localNovo.setQuantidade(local.getQuantidade());
-                localRepository.save(localNovo);
-                return mvConsultarAddObjetos("", id, "mensagem", "Local atualizado com sucesso!");
-            }
-            String alerta = "Ainda há " + local.getMaterial().getNome() + " no local";
-            return mvAtualizarAddObjetos(true, alerta, localDto, id);
         }
         return new ModelAndView("redirect:/locais");
     }
 
     @GetMapping("/{id}delete-confirm")
     public ModelAndView deleteConfirm(@PathVariable Long id){
-        Optional<Local> optional = localRepository.findById(id);
+        Optional<Local> optional = localService.findById(id);
         if (optional.isPresent()){
             LocalDto local = new LocalDto();
             local.fromLocal(optional.get());
@@ -102,44 +98,25 @@ public class LocalController {
 
     @GetMapping("/{id}delete")
     public ModelAndView delete(@PathVariable Long id){
-        Optional<Local> optional = localRepository.findById(id);
+        Optional<Local> optional = localService.findById(id);
         if(optional.isPresent()){
             Local local = optional.get();
-            if (local.getQuantidade().doubleValue() == 0){
-                localRepository.delete(local);
-                return mvConsultarAddObjetos("", id, "mensagem", "Local excluído com sucesso!");
+            switch (localService.delete(local)){
+                case "sucesso" -> {
+                    return mvConsultarAddObjetos("", id, "mensagem", "Local excluído com sucesso!");
+                }
+                case "falha quantidade" -> {
+                    String alerta = "Não foi possível excluir local!\nAinda há " + local.getMaterial().getNome() + " no local";
+                    return mvConsultarAddObjetos("", id, "mensagem", alerta);
+                }
+                case "falha ativo" -> {
+                    String alerta = "Não há locais ativos para " + local.getMaterial().getNome();
+                    return mvConsultarAddObjetos("", id, "mensagem", alerta);
+                }
+                default -> {}
             }
-            String alerta = "Não foi possível excluir local!\nAinda há " + local.getMaterial().getNome() + " no local";
-            return mvConsultarAddObjetos("", id, "mensagem", alerta);
         }
         return new ModelAndView("redirect:/locais");
-    }
-
-    private List<Local> criarListaLocais(String searchKey){
-        List<Local> locais = new ArrayList<>();
-        Optional<Local> optional = null;
-        if (!searchKey.isBlank()) {
-            if (searchKey.matches("[+-]?\\d*(\\.\\d+)?")) {
-                Long n = Long.parseLong(searchKey);
-                optional = localRepository.findById(n);
-                locais.add(optional.get());
-            }
-            Set<Local> localSet = new HashSet<>();
-            for (StatusLocal s : StatusLocal.values()) {
-                if (searchKey.equalsIgnoreCase(s.toString())) {
-                    localSet.addAll(localRepository.findAllByStatus(StatusLocal.valueOf(StringUtils.capitalize(searchKey))));
-                }
-            }
-            localSet.addAll(localRepository.findAllByNomeContainingIgnoreCase(searchKey));
-            localSet.addAll(localRepository.findAllByMaterialNome(searchKey));
-            if(optional != null) {
-                localSet.remove(optional.get());
-            }
-            locais.addAll(localSet.stream().sorted().toList());
-        } else {
-            locais.addAll(localRepository.findAll());
-        }
-        return locais;
     }
 
     private List<Material> listaMateriais(Material material){
@@ -176,7 +153,7 @@ public class LocalController {
     private ModelAndView mvConsultarAddObjetos(String searchKey, Long localId, String status, String mensagem){
         ModelAndView mv = new ModelAndView("est-consultar-local");
         mvObjetos(mv);
-        mv.addObject("locais", criarListaLocais(searchKey));
+        mv.addObject("locais", localService.criarListaLocais(searchKey));
         mv.addObject("localId", localId);
         mv.addObject("status", status);
         mv.addObject("mensagem", mensagem);

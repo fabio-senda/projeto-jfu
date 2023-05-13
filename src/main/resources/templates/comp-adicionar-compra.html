@@ -109,7 +109,7 @@
     <div class="caixa">
       <label>Fornecedor:</label>
       <select th:field="*{id}">
-        <option selected value="0">Selecione um material</option>
+        <option selected value="0">Selecione um fornecedor</option>
         <option th:each="fornec : ${fornecedores}" th:value="${fornec.id}" th:text="${fornec.nome}">
       </select>
       <div class="erro" th:errors="*{id}">err</div>

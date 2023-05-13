@@ -48,7 +48,7 @@
           <td th:text="${compra.data}"></td>
           <td class="td-icons">
             <a th:href="@{/compras/{compraId}detalhes(compraId = ${compra.id})}" class=".icon-edit">
-              <img class="svg-icon" src="/assets/lapis.svg" alt="editar">
+              <img class="svg-icon svg-info" src="/assets/info.svg" alt="detalhes">
             </a>
             <a th:href="@{/compras/{compraId}delete-confirm(compraId = ${compra.id})}" class-=".icon-edit">
               <img class="svg-icon" src="/assets/lixeira.svg" alt="excluir">

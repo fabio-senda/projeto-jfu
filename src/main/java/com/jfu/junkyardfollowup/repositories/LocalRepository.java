@@ -15,6 +15,7 @@ public interface LocalRepository extends JpaRepository<Local, Long> {
     public List<Local> findAllByNomeContainingIgnoreCase(String nome);
     public List<Local> findByStatus(StatusLocal status);
     public List<Local> findByMaterialAndStatus(Material material, StatusLocal status);
+    public List<Local> findByMaterial(Material material);
     @Query("SELECT u FROM Local u WHERE u.material.nome LIKE %:nome%")
     public List<Local> findAllByMaterialNome(@Param("nome") String nome);
     public List<Local> findAllByStatus(StatusLocal status);

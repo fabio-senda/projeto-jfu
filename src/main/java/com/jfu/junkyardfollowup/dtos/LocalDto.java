@@ -5,7 +5,6 @@ import com.jfu.junkyardfollowup.models.Local;
 import com.jfu.junkyardfollowup.models.Material;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class LocalDto {
     @NotBlank(message = "Preencha o campo")
-    @Size(max = 60)
+    @Size(max = 60, message = "Tamanho máximo = 60")
     private String nome;
 
     @NotNull(message = "Preencha o campo")

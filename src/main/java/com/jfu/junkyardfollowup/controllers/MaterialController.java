@@ -2,6 +2,7 @@ package com.jfu.junkyardfollowup.controllers;
 
 import com.jfu.junkyardfollowup.dtos.MaterialDto;
 import com.jfu.junkyardfollowup.models.Fornecimento;
+import com.jfu.junkyardfollowup.models.Local;
 import com.jfu.junkyardfollowup.models.Material;
 import com.jfu.junkyardfollowup.repositories.FornecimentoRepository;
 import com.jfu.junkyardfollowup.repositories.MaterialRepository;
@@ -84,11 +85,11 @@ public class MaterialController {
     @GetMapping("/{id}delete")
     public ModelAndView delete(@PathVariable Long id) {
         Optional<Material> optional = materialService.findById(id);
-        List<Fornecimento> fornecimentos = fornecimentoRepository.findAllByMaterial_Id(id);
-        if(optional.isPresent() && fornecimentos.isEmpty()){
+        if (optional.isPresent()) {
             Material material = optional.get();
-            materialService.delete(material);
-            return mvConsultarAddObjetos("", id, "mensagem","Material excluído com sucesso", material.getNome());
+            if (materialService.delete(material)) {
+                return mvConsultarAddObjetos("", id, "mensagem", "Material excluído com sucesso", material.getNome());
+            }
         }
         return mvConsultarAddObjetos("", id, "mensagem","Ocorreu um erro ao excluir, podem haver registros de compra com este material","nenhum");
     }

@@ -7,8 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/menu.css">
-  <link rel="stylesheet" href="../css/registrar-compra.css">
-<!--  <link rel="stylesheet" href="../css/adicionar-material.css">-->
+  <link rel="stylesheet" href="../css/detalhes.css">
   <title>Menu</title>
 </head>
 
@@ -18,12 +17,25 @@
   <aside th:replace="~{fragments/menu-compra :: aside-compra}"></aside>
 
   <main>
-    <div th:class="${sucesso} ? 'alerta sucesso fadeOut' : 'alerta sucesso'">
-      <img src="../assets/ok.svg" alt="Erro"> Compra adicionada com sucesso!
+    <div class="infos">
+      <div class="container">
+        <div class="info">
+          <h1 class="titulo"th:text="'Compra #' + ${idCompra}"></h1>
+          <div class="infoss">
+            <h2 class="titulo2">Fornecedor: <span th:text=" ${fornecedor}"></span></h2>
+            <h2 class="titulo2">Data: <span th:text="${data}"></span></h2>
+            <h2 class="titulo2">Total: <span th:text="'R$: ' + ${total}"></span></h2>
+          </div>
+          <div class="botoes">
+            <a class="btn" th:href="@{/compras/{id}gerar-pdf(id = ${idCompra})}">Emitir recibo</a>
+            <a class="btn btn-excluir" th:href="@{/compras/{id}delete-confirm(id = ${idCompra})}"> Excluir</a>
+          </div>
+        </div>
+      </div>
+      <div th:class="${sucesso} ? 'alerta sucesso fadeOut' : 'alerta sucesso'">
+        <img src="../assets/ok.svg" alt="Erro"> Compra adicionada com sucesso!
+      </div>
     </div>
-      <h1 th:text="'Compra #' + ${idCompra}"></h1>
-      <h2 th:text="'Fornecedor: ' + ${fornecedor}"></h2>
-      <h2 th:text="'Data: ' + ${data}"></h2>
     <table class="tabela">
       <thead>
       <tr>
@@ -36,21 +48,11 @@
       <tbody>
       <tr th:each="f : ${fornecimentos}">
         <td scope="row" th:text="${f.material.nome}"></td>
-        <td th:text="${f.quantidade} + 'kg'"></td>
+        <td th:text="${f.quantidade} + ' kg'"></td>
         <td th:text="'R$ ' + ${f.preco}"></td>
         <td th:text="'R$ ' + ${f.total}"></td>
-<!--        <td class="td-icons">-->
-<!--          <a th:href="@{/materiais/{materialId}edit(materialId = ${material.id})}" class=".icon-edit">-->
-<!--            <img class="svg-icon" src="/assets/lapis.svg" alt="editar">-->
-<!--          </a>-->
-<!--          <a th:href="@{/materiais/{materialId}delete-confirm(materialId = ${material.id})}" class-=".icon-edit">-->
-<!--            <img class="svg-icon" src="/assets/lixeira.svg" alt="excluir">-->
-<!--          </a>-->
-<!--        </td>-->
       </tr>
       </tbody>
-      <a th:href="@{/compras/{id}gerar-pdf(id = ${idCompra})}">Emitir recibo</a>
-      <a>Excluir</a>
     </table>
   </main>
 

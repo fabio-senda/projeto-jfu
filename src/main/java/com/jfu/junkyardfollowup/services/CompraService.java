@@ -61,6 +61,18 @@ public class CompraService {
     @Transactional
     public void delete(RegistroDeCompra registroDeCompra){
         for (Fornecimento f : registroDeCompra.getFornecimentos()){
+            Material material = materialService.findById(f.getMaterial().getId()).orElse(null);
+            material.setQuantidade(material.getQuantidade().subtract(f.getQuantidade()));
+            List<Local> locais = localRepository.findByMaterial(material);
+            for (Local l: locais) {
+                if(l.getQuantidade().compareTo(f.getQuantidade()) >= 0){
+                    l.setQuantidade(l.getQuantidade().subtract(f.getQuantidade()));
+                    break;
+                }else {
+                    f.setQuantidade(f.getQuantidade().subtract(l.getQuantidade()));
+                    l.setQuantidade(new BigDecimal(0));
+                }
+            }
             fornecimentoRepository.delete(f);
         }
         compraRepository.delete(registroDeCompra);

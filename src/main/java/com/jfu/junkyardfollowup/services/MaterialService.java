@@ -1,8 +1,10 @@
 package com.jfu.junkyardfollowup.services;
 
 import com.jfu.junkyardfollowup.enums.StatusLocal;
+import com.jfu.junkyardfollowup.models.Fornecimento;
 import com.jfu.junkyardfollowup.models.Local;
 import com.jfu.junkyardfollowup.models.Material;
+import com.jfu.junkyardfollowup.repositories.FornecimentoRepository;
 import com.jfu.junkyardfollowup.repositories.LocalRepository;
 import com.jfu.junkyardfollowup.repositories.MaterialRepository;
 import jakarta.transaction.Transactional;
@@ -18,14 +20,23 @@ public class MaterialService {
     MaterialRepository materialRepository;
 
     @Autowired
+    FornecimentoRepository fornecimentoRepository;
+
+    @Autowired
     LocalRepository localRepository;
 
     public Material save(Material material){
         return materialRepository.save(material);
     }
 
-    public void delete(Material entity) {
-        materialRepository.delete(entity);
+    public boolean delete(Material material) {
+        List<Fornecimento> fornecimentos = fornecimentoRepository.findAllByMaterial_Id(material.getId());
+        List<Local> locais = localRepository.findByMaterial(material);
+        if(fornecimentos.isEmpty() && locais.isEmpty()){
+            materialRepository.delete(material);
+            return true;
+        }
+        return false;
     }
 
     public Optional<Material> findById(Long id) {
@@ -39,7 +50,6 @@ public class MaterialService {
     public List<Material> listaMateriais(){
         return materialRepository.findAll().stream().sorted(Comparator.comparing(Material::getNome)).toList();
     }
-
 
     public List<Material> listaMaterialComLocais(){
         List<Local> locais = localRepository.findByStatus(StatusLocal.Ativo);
