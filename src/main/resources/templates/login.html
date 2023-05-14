@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/login.css">
+    <title>Login</title>
 </head>
 <body>
 <div id="login">
@@ -14,9 +15,9 @@
             <h1>Login</h1>
         </div>
         <div class="form-main">
-            <div th:if="${param.error}">
+            <div class="erro" th:if="${param.error}">
                 Usuário e senha inválidos</div>
-            <div th:if="${param.logout}">
+            <div class="erro" th:if="${param.logout}">
                 Você saiu da sua conta</div>
             <div class="barra">
                 <label for="usuario">Usuário:</label>
@@ -24,7 +25,7 @@
             </div>
             <div class="barra">
                 <label for="senha">Senha:</label>
-                <input type="text" id="senha" name="password" autocomplete="off" placeholder="Senha">
+                <input type="password" id="senha" name="password" autocomplete="off" placeholder="Senha">
             </div>
         </div>
         <div class="form-footer">
