@@ -28,6 +28,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/compras")
+@SessionAttributes("itens")
 public class CompraController {
     @Autowired
     CompraService compraService;
@@ -38,8 +39,10 @@ public class CompraController {
     @Autowired
     FornecedorRepository fornecedorRepository;
 
-    private List<Fornecimento> itens1 = new ArrayList<>();
-    private List<Fornecimento> itens2 = new ArrayList<>();
+    @ModelAttribute("itens")
+    public List<Fornecimento> itens() {
+        return new ArrayList<>();
+    }
 
     @GetMapping
     public ModelAndView consultarCompras(@RequestParam(defaultValue = "") String searchKey){
@@ -47,20 +50,20 @@ public class CompraController {
     }
 
     @GetMapping("/add")
-    public ModelAndView telaAdd(){
+    public ModelAndView telaAdd(@ModelAttribute("itens") List<Fornecimento> itens1){
         return mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
                 "nenhum", "nenhum", new Fornecedor(),
-                null, calcularTotal());
+                null, calcularTotal(itens1));
     }
 
     @PostMapping("/addItem")
     public ModelAndView addItem(@ModelAttribute("fornecimento") @Valid FornecimentoDto fornecimentoDto,
-                                BindingResult result, RedirectAttributes redirect){
+                                BindingResult result, RedirectAttributes redirect, @ModelAttribute("itens") List<Fornecimento> itens1){
         boolean flag = true;
         if(result.hasErrors()){
             return mvAdicionarAddObjetos(fornecimentoDto, itens1,
                     "nenhum", "nenhum", new Fornecedor(),
-                    null, calcularTotal());
+                    null, calcularTotal(itens1));
         }
         BigDecimal total = new BigDecimal(0);
         for (Fornecimento item : itens1) {
@@ -86,24 +89,24 @@ public class CompraController {
     }
 
     @GetMapping("/confirmar-registro")
-    public ModelAndView finalizar(){
+    public ModelAndView finalizar(@ModelAttribute("itens") List<Fornecimento> itens1){
         return mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
                 "registrar", "Confirmar registro de compra?", new Fornecedor(),
-                listaFornecedores(), calcularTotal());
+                listaFornecedores(), calcularTotal(itens1));
     }
 
     @PostMapping("/new")
     public ModelAndView novo(@ModelAttribute("fornecedor") @Valid Fornecedor fornecedor,
-                             BindingResult result, RedirectAttributes redirect){
+                             BindingResult result, RedirectAttributes redirect, @ModelAttribute("itens") List<Fornecimento> itens1){
         if(result.getErrorCount() > 1){
             return mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
                     "registrar", "Confirmar registro de compra?", fornecedor,
-                    listaFornecedores(), calcularTotal());
+                    listaFornecedores(), calcularTotal(itens1));
         }
         if(itens1.size() == 0){
             return mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
                     "mensagem", "É preciso adicionar pelo menos um item",
-                    new Fornecedor(), null, calcularTotal());
+                    new Fornecedor(), null, calcularTotal(itens1));
         }
         RegistroDeCompra compra = new RegistroDeCompra();
         compra.setData(LocalDateTime.now().atZone(ZoneId.systemDefault()).toLocalDateTime());
@@ -118,16 +121,16 @@ public class CompraController {
     }
 
     @GetMapping("/{id}delete-item-confirm")
-    public ModelAndView confirmar(@PathVariable Long id){
+    public ModelAndView confirmar(@PathVariable Long id, @ModelAttribute("itens") List<Fornecimento> itens1){
         ModelAndView mv = mvAdicionarAddObjetos(new FornecimentoDto(), itens1,
                 "excluir", "Excluir item?", new Fornecedor(),
-                listaFornecedores(), calcularTotal());
+                listaFornecedores(), calcularTotal(itens1));
         mv.addObject("id", id);
         return mv;
     }
 
     @GetMapping("/{id}delete-item")
-    public ModelAndView deleteItem(@PathVariable Long id){
+    public ModelAndView deleteItem(@PathVariable Long id, @ModelAttribute("itens") List<Fornecimento> itens1){
         Fornecimento f = null;
         for (Fornecimento fornecimento : itens1){
             if(fornecimento.getMaterial().getId().equals(id)){
@@ -174,7 +177,7 @@ public class CompraController {
         return new ModelAndView("redirect:/compras");
     }
 
-    private BigDecimal calcularTotal(){
+    private BigDecimal calcularTotal(List<Fornecimento> itens1){
         BigDecimal total = new BigDecimal(0);
         for (Fornecimento item : itens1){
             total = total.add(item.getTotal());
