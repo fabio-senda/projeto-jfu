@@ -22,7 +22,7 @@
       <img src="../assets/ok.svg" alt="Erro"> Fornecedor adicionado com sucesso!
     </div>
     <form class="adicionar" th:object="${fornecedor}" th:action="@{/fornecedores/add}" method="post">
-      <h1>Adicionar Material</h1>
+      <h1>Adicionar Fornecedor</h1>
       <div class="caixa">
         <label for="fornecedor">Fornecedor</label>
         <input id="fornecedor" type="text" th:field="*{nome}" autofocus>
