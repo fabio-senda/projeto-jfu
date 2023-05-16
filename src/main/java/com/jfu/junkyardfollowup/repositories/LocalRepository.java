@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LocalRepository extends JpaRepository<Local, Long> {
+    public List<Local> findAllByNomeIgnoreCase(String nome);
     public List<Local> findAllByNomeContainingIgnoreCase(String nome);
     public List<Local> findByStatus(StatusLocal status);
     public List<Local> findByMaterialAndStatus(Material material, StatusLocal status);

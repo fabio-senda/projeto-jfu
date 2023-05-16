@@ -27,6 +27,7 @@
         <label for="local">Local</label>
         <input id="local" type="text" th:field="*{nome}" autofocus>
         <div class="erro" th:errors="*{nome}"></div>
+        <div th:class="${existe} ? 'erro' : 'erro hidden'">Local já adicionado</div>
       </div>
       <div class="caixa">
         <label for="select-material">Material:</label>

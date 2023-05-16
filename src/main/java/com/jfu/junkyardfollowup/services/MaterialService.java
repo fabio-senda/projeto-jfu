@@ -43,6 +43,10 @@ public class MaterialService {
         return materialRepository.findById(id);
     }
 
+    public List<Material> findByNomeIgnoreCase(String key){
+        return materialRepository.findByNomeIgnoreCase(key);
+    }
+
     public List<Material> findByNomeContainingIgnoreCase(String key) {
         return materialRepository.findByNomeContainingIgnoreCase(key);
     }

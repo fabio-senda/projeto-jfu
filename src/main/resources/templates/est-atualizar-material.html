@@ -30,6 +30,7 @@
         <label for="material">Nome</label>
         <input id="material" type="text" th:field="*{nome}" autofocus>
         <div class="erro" th:errors="*{nome}"></div>
+        <div th:class="${existe} ? 'erro' : 'erro hidden'">Nome de material já existente</div>
       </div>
       <div class="caixa">
         <label for="preco">Preço por kg</label>

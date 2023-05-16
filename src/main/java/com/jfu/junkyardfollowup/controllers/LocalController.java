@@ -45,6 +45,10 @@ public class LocalController {
         if (result.getErrorCount() > 1){
             return mvAdicionarAddObjetos(false, localDto);
         }
+        List<Local> locais = localService.findAllByNomeIgnoreCase(localDto.getNome());
+        if (!locais.isEmpty()){
+            return mvAdicionarAddObjetos(false, localDto).addObject("existe", true);
+        }
         localService.save(localDto.toLocal());
         return mvAdicionarAddObjetos(true, new LocalDto());
     }
@@ -69,6 +73,10 @@ public class LocalController {
         Optional<Local> optional = localService.findById(id);
         if(optional.isPresent()){
             Local local = optional.get();
+            List<Local> locais = localService.findAllByNomeIgnoreCase(localDto.getNome());
+            if (!locais.isEmpty() && !localDto.getNome().equalsIgnoreCase(local.getNome())){
+                return mvAtualizarAddObjetos(false,"Preencha os campos corretamente", localDto, id).addObject("existe", true);
+            }
             switch (localService.update(local, localDto)) {
                 case "sucesso" -> {
                     return mvConsultarAddObjetos("", id, "mensagem", "Local atualizado com sucesso!");

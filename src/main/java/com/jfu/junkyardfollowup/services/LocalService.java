@@ -19,6 +19,9 @@ public class LocalService {
     public Optional<Local> findById(Long id){
         return localRepository.findById(id);
     }
+    public List<Local> findAllByNomeContainingIgnoreCase(String nome){
+        return localRepository.findAllByNomeContainingIgnoreCase(nome);
+    }
 
     @Transactional
     public Local save(Local local){
@@ -61,6 +64,10 @@ public class LocalService {
 
     public boolean mover(Local local1, Local local2){
         return true;
+    }
+
+    public List<Local> findAllByNomeIgnoreCase(String nome){
+        return localRepository.findAllByNomeIgnoreCase(nome);
     }
 
     public List<Local> criarListaLocais(String searchKey){

@@ -43,6 +43,10 @@ public class MaterialController {
         if(result.hasErrors()){
             return mvAdicionarAddObjetos(false, materialDto);
         }
+        List<Material> materiais = materialService.findByNomeIgnoreCase(materialDto.getNome());
+        if (!materiais.isEmpty()){
+            return mvAdicionarAddObjetos(false, materialDto).addObject("existe", true);
+        }
         materialService.save(materialDto.toMaterial());
         return mvAdicionarAddObjetos(true, new MaterialDto());
     }
@@ -60,14 +64,20 @@ public class MaterialController {
     @PostMapping("/{id}edit")
     public ModelAndView update(@PathVariable Long id, @ModelAttribute("material") @Valid MaterialDto materialDto,
                                BindingResult result, RedirectAttributes redirect){
-        Optional<Material> optional = materialService.findById(id);
         if (result.hasErrors()) {
             return mvAtualizarAddObjetos(false, materialDto, id);
         }
+        Optional<Material> optional = materialService.findById(id);
         if (optional.isEmpty()) {
             return mvAtualizarAddObjetos(true, materialDto, id);
         }
         Material material = optional.get();
+        List<Material> materiais = materialService.findByNomeIgnoreCase(materialDto.getNome());
+        if (!materiais.isEmpty() && !materialDto.getNome().equalsIgnoreCase(material.getNome())){
+            return mvAtualizarAddObjetos(false, materialDto, id).addObject("existe", true);
+        }
+
+
         materialService.save(materialDto.toMaterial(material));
         return mvConsultarAddObjetos("", 0l, "mensagem","Material atualizado com sucesso", "nenhum");
     }

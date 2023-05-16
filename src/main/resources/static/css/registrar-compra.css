@@ -161,3 +161,7 @@ tr:nth-child(even) {
 .svg-icon:hover{
     background-color: #d9d9d9;
 }
+
+.hidden{
+    display: none;
+}
